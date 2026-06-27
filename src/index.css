@@ -717,6 +717,60 @@ footer {
         transform: rotate(360deg);
     }
 }
+.inputLogin input {
+    color: white;
+    font-size: 15px;
+    margin-left: 5px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+.inputLogin input::placeholder {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    opacity: 1;
+}
+
+.checkLogin {
+    display: flex;
+    padding: 10px;
+    margin: 15px;
+    justify-content: space-between;
+}
+.checkLogin label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.checkLogin a {
+    text-decoration: none;
+    color: var(--primary-light);
+    font-weight: 500;
+}
+
+.buttonLogin {
+    padding: 10px;
+    margin: 15px;
+}
+.buttonLogin button {
+    width: 100%;
+}
+
+.cardLoginFooter {
+    padding: 0;
+    display: inline;
+    background-color: var(--card-bg);
+}
+.cardLoginFooter p {
+    display: block;
+}
+.cardLoginFooter a {
+    text-decoration: none;
+    color: var(--primary-light);
+    font-weight: 500;
+}
+
 .prose {
     p {
         font-weight: 700;
@@ -795,59 +849,6 @@ footer {
     padding: 10px;
     margin: 15px;
     justify-content: flex-start;
-}
-.inputLogin input {
-    color: white;
-    font-size: 15px;
-    margin-left: 5px;
-    outline: none;
-    border: none;
-    background-color: transparent;
-}
-.inputLogin input::placeholder {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-    opacity: 1;
-}
-
-.checkLogin {
-    display: flex;
-    padding: 10px;
-    margin: 15px;
-    justify-content: space-between;
-}
-.checkLogin label {
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-.checkLogin a {
-    text-decoration: none;
-    color: var(--primary-light);
-    font-weight: 500;
-}
-
-.buttonLogin {
-    padding: 10px;
-    margin: 15px;
-}
-.buttonLogin button {
-    width: 100%;
-}
-
-.cardLoginFooter {
-    padding: 0;
-    display: inline;
-    background-color: var(--card-bg);
-}
-.cardLoginFooter p {
-    display: block;
-}
-.cardLoginFooter a {
-    text-decoration: none;
-    color: var(--primary-light);
-    font-weight: 500;
 }
 
 

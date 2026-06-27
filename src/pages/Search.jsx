@@ -69,7 +69,8 @@ function useFilters() {
             if (error) throw error;
 
             // 5. Actualizamos los estados
-            setTotal(count);
+            setTotal(count)
+            console.log(data)
             setJobs(data);
         } catch (error) {
             console.error('Error fetching de datos', error);

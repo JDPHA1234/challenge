@@ -850,5 +850,11 @@ footer {
     margin: 15px;
     justify-content: flex-start;
 }
+.loginError {
+    display : flex;
+    justify-content: center;
+    color : var(--text-secondary);
+}
+
 
 

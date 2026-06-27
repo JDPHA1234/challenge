@@ -1,22 +1,32 @@
+import { Route, Routes, useLocation } from 'react-router-dom'
+import { Header } from './components/Header.jsx'
+import { Footer } from './components/Footer.jsx'
 import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from './components/ProtectedRoute.jsx'
-import { Spinner } from './components/Spinner.jsx'
 const Home = lazy(() =>  import('./pages/Home.jsx'))
 const Search = lazy(() =>  import('./pages/Search.jsx'))
 const Details = lazy(() => import('./pages/Details.jsx'))
+const LoginPage = lazy(() => import('./pages/LoginPage.jsx'))
+const RegisterPage = lazy(() => import('./pages/RegisterPage.jsx'))
 function App() {
-
+  const location = useLocation()
+  const hideHeader = location.pathname === '/login' || location.pathname === '/register'
+  const hideFooter = location.pathname === '/login' || location.pathname === '/register'
   return (
     <>
-    <Suspense fallback={<Spinner />}>
-      <Routes>
-        <Route path='/details/:id' element={<Details/>} />
-        <Route path='/search' element={<Search />} />
+    {!hideHeader ? <Header /> : null}
+      <Suspense fallback={<p id='jobs-loading'>Cargando...</p>}>
+        <Routes>
+        <Route path='/details/:id' element={ <ProtectedRoute>
+          <Details/>
+        </ProtectedRoute>}/>
         <Route path='/' element={<Home />} />
-      </Routes>
-    </Suspense>
-
+        <Route path='/search' element={<Search />} />
+        <Route path='/login' element={<LoginPage/>} />
+        <Route path='/register' element={<RegisterPage/>} />
+        </Routes>
+      </Suspense>
+     {!hideFooter ? <Footer /> : null}
     </>
   )
 }

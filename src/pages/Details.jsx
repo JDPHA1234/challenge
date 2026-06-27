@@ -71,7 +71,6 @@ export default function Details(){
             <JobDetails title='Requisitos' content={job.content.requirements}/>
             <JobDetails title='Acerca de la empresa' content={job.content.about}/>
             <div>
-            <button>Aplicar ahora</button>
             </div>
         </section>
     </main> 

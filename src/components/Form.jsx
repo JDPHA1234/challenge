@@ -64,14 +64,15 @@ export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFil
                     <select id="tech-filter" name={idTech} aria-label="Tecnologia" defaultValue={initialFilterValue.tech}>
                         <option value="">Tecnologia</option>
                         <option value="react">React</option>
-                        <option value="node">Node.js</option>
+                        <option value="node.js">Node.js</option>
                         <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
                     </select>
-                    <select id="location-filter" name={idLoc} aria-label="Ubicación" defaultValue={initialFilterValue.location}>
-                        <option value=""  >Ubicacion</option>
-                        <option value="moron">Moron</option>
-                        <option value="haedo">Haedo</option>
-                        <option value="ramos-mejia">Ramos mejia</option>
+                    <select id="location-filter" name={idLoc} aria-label="Modalidad" defaultValue={initialFilterValue.location}>
+                        <option value=""  >Modalidad</option>
+                        <option value="presencial">Presencial</option>
+                        <option value="semi-presencial">Semi-presencial</option>
+                        <option value="remoto">Remoto</option>
                     </select>
                     <select id="contract-filter" name={idContract} aria-label="Tipo de contrato" defaultValue={initialFilterValue.contract}>
                         <option value="" >Tipo de contrato</option>
@@ -82,7 +83,8 @@ export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFil
                         <option value=""  >Nivel de experiencia</option>
                         <option value="junior">Junior</option>
                         <option value="senior">Senior</option>
-                        <option value="senior-engineer">Senior engineer</option>
+                        <option value="engineer">Engineer</option>
+                        <option value="senior engineer">Senior engineer</option>
                     </select>
                     <input type="submit" value="Filtrar" hidden />
                     <button type='button' id="button-clear" onClick={handleClear}>Limpiar</button>

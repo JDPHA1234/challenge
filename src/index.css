@@ -757,10 +757,571 @@ footer {
     width: 100%;
 }
 
+.company-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto 2rem;
+}
+
+.company-hero {
+    position: relative;
+    min-height: 240px;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(3, 8, 20, 0.2), rgba(3, 8, 20, 0.88));
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.company-hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.85) brightness(0.6);
+}
+
+.company-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(4, 10, 24, 0.05), rgba(4, 10, 24, 0.78)),
+        radial-gradient(circle at top left, rgba(9, 153, 255, 0.18), transparent 35%);
+}
+
+.company-hero-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: end;
+    padding: 1.25rem;
+    min-height: 240px;
+}
+
+.company-brand-card {
+    width: 4.25rem;
+    height: 4.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, rgba(25, 32, 58, 0.95), rgba(8, 12, 24, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+.company-brand-card span {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: 2px solid var(--text-primary);
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.company-hero-copy h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 0.5rem;
+}
+
+.company-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.company-badges span,
+.position-tags span {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.company-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.company-primary-action,
+.company-secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border-radius: 0.7rem;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.company-primary-action {
+    background: linear-gradient(180deg, var(--primary-light), var(--primary-hover));
+    color: white;
+}
+
+.company-secondary-action {
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.company-primary-action:hover,
+.company-secondary-action:hover {
+    transform: translateY(-1px);
+}
+
+.company-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(300px, 0.95fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.company-main-column,
+.company-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.company-card {
+    background: linear-gradient(180deg, rgba(25, 31, 46, 0.96), rgba(13, 18, 29, 0.98));
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.28);
+}
+
+.company-section-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.company-section-title h2 {
+    font-size: 1.4rem;
+}
+
+.company-section-title p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.company-about-card p {
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+.company-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.company-stats div {
+    text-align: center;
+    padding: 0.9rem 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.9rem;
+}
+
+.company-stats dt {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.company-stats dd {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+
+.benefit-item {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    padding: 0.9rem;
+    border-radius: 0.9rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.benefit-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.8rem;
+    color: var(--primary-light);
+    background: rgba(9, 153, 255, 0.12);
+    flex-shrink: 0;
+}
+
+.benefit-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.benefit-item h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.benefit-item p {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+}
+
+.company-sidebar {
+    min-height: 100%;
+}
+
+.open-positions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.position-card {
+    padding: 0.95rem;
+    border-radius: 0.9rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.position-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.position-meta,
+.position-salary {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+}
+
+.position-salary {
+    margin-top: 0.15rem;
+    margin-bottom: 0.6rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.position-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.company-all-jobs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.25rem;
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.company-all-jobs:hover,
+.company-all-jobs:focus {
+    text-decoration: underline;
+}
+
+@media (max-width: 960px) {
+    .company-hero-content {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .company-actions {
+        justify-content: flex-start;
+    }
+
+    .company-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .company-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .company-page {
+        padding: 0.75rem;
+    }
+
+    .company-hero-content {
+        min-height: 260px;
+    }
+
+    .company-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
 .cardLoginFooter {
     padding: 0;
     display: inline;
     background-color: var(--card-bg);
+}
+
+.candidacies-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto 2rem;
+    padding: 1.25rem 1rem 0;
+}
+
+.candidacies-header h1 {
+    margin-bottom: 0.4rem;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+.candidacies-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.candidacies-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+    padding-top: 0 !important;
+}
+
+.candidacy-summary-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 92px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.9rem;
+    background: linear-gradient(180deg, rgba(20, 28, 46, 0.96), rgba(12, 19, 34, 0.98));
+}
+
+.candidacy-summary-card span,
+.candidacy-applied-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+.candidacy-summary-card span {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.candidacy-summary-card strong {
+    line-height: 1;
+    font-size: 1.9rem;
+}
+
+.candidacy-summary-card.tone-warning strong {
+    color: var(--primary-light);
+}
+
+.candidacy-summary-card.tone-info strong {
+    color: #8ecbff;
+}
+
+.candidacy-summary-card.tone-muted strong {
+    color: var(--text-secondary);
+}
+
+.candidacies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.candidacy-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.9rem;
+    background: linear-gradient(180deg, rgba(19, 27, 45, 0.96), rgba(12, 18, 31, 0.98));
+}
+
+.candidacy-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.45rem;
+    background: linear-gradient(180deg, rgba(10, 23, 38, 0.95), rgba(17, 28, 46, 0.95));
+    color: var(--text-secondary);
+    font-weight: 800;
+}
+
+.candidacy-icon span {
+    font-size: 1.1rem;
+}
+
+.candidacy-main h2 {
+    margin-bottom: 0.25rem;
+    font-size: 1.05rem;
+}
+
+.candidacy-main p {
+    color: var(--text-secondary);
+    font-size: 0.93rem;
+}
+
+.candidacy-main p span {
+    margin: 0 0.25rem;
+    color: var(--text-muted);
+}
+
+.candidacy-meta {
+    text-align: right;
+}
+
+.candidacy-applied-label {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+}
+
+.candidacy-meta strong {
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.candidacy-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 84px;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.candidacy-info {
+    border-color: rgba(9, 153, 255, 0.35);
+    background: rgba(9, 153, 255, 0.12);
+    color: #b9e1ff;
+}
+
+.candidacy-warning {
+    border-color: rgba(9, 153, 255, 0.22);
+    background: rgba(10, 61, 102, 0.18);
+    color: var(--text-secondary);
+}
+
+.candidacy-danger {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(9, 153, 255, 0.08);
+    color: var(--text-muted);
+}
+
+.candidacy-arrow {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.candidacies-footer {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0 1rem;
+}
+
+.candidacies-load-more {
+    min-width: 220px;
+    border: 1px solid rgba(9, 153, 255, 0.28);
+    background: transparent;
+    color: var(--text-primary);
+}
+
+@media (max-width: 960px) {
+    .candidacies-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .candidacy-item {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+    }
+
+    .candidacy-meta,
+    .candidacy-status,
+    .candidacy-arrow {
+        grid-column: 2;
+        justify-self: start;
+    }
+
+    .candidacy-meta {
+        text-align: left;
+    }
+}
+
+@media (max-width: 640px) {
+    .candidacies-page {
+        padding-inline: 0.75rem;
+    }
+
+    .candidacies-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .candidacy-item {
+        gap: 0.8rem;
+    }
 }
 .cardLoginFooter p {
     display: block;
@@ -854,6 +1415,20 @@ footer {
     display : flex;
     justify-content: center;
     color : var(--text-secondary);
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    /* 1. Tapamos el fondo amarillo con una sombra interior del color de tu input */
+    /* Cambia el #0f172a por el color hexadecimal exacto de tu fondo oscuro */
+    -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
+    
+    /* 2. Forzamos que el texto siga siendo blanco (o del color que uses) */
+    -webkit-text-fill-color: white !important;
+    
+    /* 3. Evitamos destellos o transiciones raras del navegador */
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 

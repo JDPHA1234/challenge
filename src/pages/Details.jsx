@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom'
 import snarkdown from 'snarkdown'
 import { supabase } from '../supabase-client.js'
 function JobDetails({title,content}) {
-    const html = snarkdown(content)
+    const html = content ? snarkdown(content) : ''
     return (
         <article className="Each-details">
                 <h2>{title}</h2>
-                <div className="prose" dangerouslySetInnerHTML={{__html : html}}/>
+                <div className="prose" dangerouslySetInnerHTML={{__html : html}} />
                 
             </article>
     )
@@ -52,24 +52,28 @@ export default function Details(){
                 </div>
             )
         }
+
+        if (!job) {
+            return null
+        }
     return (
          <main>
             <aside>
-            <small className = "small"><Link href='/search' className = "linkSmall">Empleos</Link> / Ingenierio de Software Senior</small>
+            <small className = "small"><Link href='/search' className = "linkSmall">Empleos</Link> / {job.titulo}</small>
             </aside>
         <section className="Section-detailsOffer">
             <header>
                 <div>
-                <h1>Ingeniero de Software Senior</h1>
-                <small>Tech Solutions Inc. | Remoto</small>
+                <h1>{job.titulo}</h1>
+                <small>{job.empresa} | {job.ubicacion}</small>
                 </div>
                 <button>Aplicar ahora</button>
     
             </header>
-            <JobDetails title='Descripcion del puesto' content={job.content.description}/>
-            <JobDetails title='Responsabilidades' content={job.content.responsibilities}/>
-            <JobDetails title='Requisitos' content={job.content.requirements}/>
-            <JobDetails title='Acerca de la empresa' content={job.content.about}/>
+            <JobDetails title='Descripcion del puesto' content={job.content?.description} />
+            <JobDetails title='Responsabilidades' content={job.content?.responsibilities} />
+            <JobDetails title='Requisitos' content={job.content?.requirements} />
+            <JobDetails title='Acerca de la empresa' content={job.content?.about} />
             <div>
             </div>
         </section>

@@ -79,15 +79,6 @@ export default function FormPerfil(){
             <input type="text" name="expForm"/>
             </div>
             </div>
-            <div className="habilityDiv">
-                <h3>Habilidades</h3>
-                <ul>
-                    <li>JavaScript</li>
-                    <li>React</li>
-                    <li>Node.js</li>
-                    <li>Python</li>
-                </ul>   
-            </div>
             <div className="cvDiv">
                 <h3>CV</h3>
                 <label id="CvUpload">

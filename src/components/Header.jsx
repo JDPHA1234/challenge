@@ -19,7 +19,7 @@ export function Header() {
                 <NavLink to="/" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Inicio</NavLink>
                 <NavLink to="/search" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Empleos</NavLink>
                 <NavLink to="/companies" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Empresas</NavLink>
-                <NavLink to="/salaries" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Salarios</NavLink>
+                <NavLink to="/my-candidacies" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Candidatos</NavLink>
             </nav>
             <div>
                 {uploadcv}

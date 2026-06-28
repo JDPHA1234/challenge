@@ -4,7 +4,7 @@ import { supabase } from '../supabase-client.js'
 export const useAuthStore = create((set)=> ({
     // estado
     isLoggedIn: false,
-    error: null,
+    errorlogin: null,
     user: null,
 
     login : async (email, password) => {
@@ -14,15 +14,20 @@ export const useAuthStore = create((set)=> ({
     })
     
     if (error) {
-      set({ error: error.message })
+      set({ error: error.message, user: null, isLoggedIn: false })
+      return { success: false, error: error.message }
     } else {
       set({ user: data.user, error: null, isLoggedIn: true })
+        return { success: true, error: null }
     }
   },
     signUp : async (email, password) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: extraData 
+      }
     })
     if (error) {
       set({ error: error.message })
@@ -31,7 +36,9 @@ export const useAuthStore = create((set)=> ({
     }},
     logOut: async () => {
     await supabase.auth.signOut()
-    set({ user: null, isLoggedIn: false, error: null })
+    set({ user: null },
+    set({isLoggedIn : false})
+    )
 }
 
 

@@ -15,10 +15,10 @@ export default function LoginPage() {
         }
         const handleSubmit = async (event) => {
             event.preventDefault()
-            login(email, password)
-            if (!error) {
-                    navigateTo('/')
-                }
+            const result = await login(email, password)
+            if (result.success) {
+                navigateTo('/')
+            }
         }
     return (
         <main className="mainLogin">

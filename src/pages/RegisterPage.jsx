@@ -11,6 +11,9 @@ export default function RegisterPage() {
             const handlechangeemail= (event) => {
                 setEmail(event.target.value)
             }
+            const handlechangeusername= (event) => {
+                setUsername(event.target.value)
+            }
             const handlechangepassword= (event) => {
                 setPassword(event.target.value)
             }

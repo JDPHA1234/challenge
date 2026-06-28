@@ -2,9 +2,10 @@ import { Link } from "./Link.jsx"
 import { NavLink } from "react-router-dom"
 import { useAuthStore } from "../store/authStore.js"
 export function Header() {
-    const {isLoggedIn} = useAuthStore()
-    const loginButton = isLoggedIn ? <img src="../public/fotoperfil.webp" alt="Foto del usuario" /> : <NavLink to="/login">Iniciar Sesion</NavLink>
-    const uploadcv = isLoggedIn ? <a href="/upload-cv">Subir CV</a> : null
+    const {isLoggedIn , avatar_url} = useAuthStore()
+    const loginButton = isLoggedIn ? 
+        <img src={avatar_url} alt="Foto del usuario" />  : <NavLink to="/login">Iniciar Sesion</NavLink>
+    const uploadcv = isLoggedIn ? <NavLink to="/profile">Subir CV</NavLink> : null
     return (
         <header>
             <h1>
@@ -19,7 +20,6 @@ export function Header() {
                 <NavLink to="/" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Inicio</NavLink>
                 <NavLink to="/search" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Empleos</NavLink>
                 <NavLink to="/companies" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Empresas</NavLink>
-                <NavLink to="/my-candidacies" className={({ isActive }) => isActive ? "isActiveLink" : ""}>Candidatos</NavLink>
             </nav>
             <div>
                 {uploadcv}

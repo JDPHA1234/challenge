@@ -1,3 +1,5 @@
+import { AsideProfile } from '../components/AsideProfile'
+
 const summaryCards = [
 	{ label: 'Total', value: '12', tone: '' },
 	{ label: 'En revisión', value: '4', tone: 'warning' },
@@ -54,6 +56,8 @@ function StatusBadge({ tone, children }) {
 
 export default function Mycandidacies() {
 	return (
+        <div className="appConteiner">
+        <AsideProfile/>
 		<main className="candidacies-page">
 			<section className="candidacies-header">
 				<h1>Mis candidaturas</h1>
@@ -97,5 +101,7 @@ export default function Mycandidacies() {
 			</section>
 
 		</main>
+
+        </div>
 	)
 }

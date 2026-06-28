@@ -1134,7 +1134,6 @@ footer {
     padding: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 0.9rem;
-    background: linear-gradient(180deg, rgba(20, 28, 46, 0.96), rgba(12, 19, 34, 0.98));
 }
 
 .candidacy-summary-card span,
@@ -1180,7 +1179,6 @@ footer {
     padding: 1rem 1.1rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 0.9rem;
-    background: linear-gradient(180deg, rgba(19, 27, 45, 0.96), rgba(12, 18, 31, 0.98));
 }
 
 .candidacy-icon {

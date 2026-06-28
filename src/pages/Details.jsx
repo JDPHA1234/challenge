@@ -23,10 +23,18 @@ export default function Details(){
     useEffect(() => {
         async function fetchJob() {
             try {
-                const { data, error } = await supabase.from('Jobs').select('*').eq('id', id).single()
+                const { data, error } = await supabase.from('Trabajo').select(
+                `titulo,
+                ubicacion,
+                Empresa!inner (
+                    nombre
+                ),
+                content
+                `).eq('id', id).single()
                 if (error) {
                     throw error
-                }
+                    }
+              console.log(data)
                 setJob(data)
             } catch (error) {
                 SetError(error.message)
@@ -65,7 +73,7 @@ export default function Details(){
             <header>
                 <div>
                 <h1>{job.titulo}</h1>
-                <small>{job.empresa} | {job.ubicacion}</small>
+                <small>{job.Empresa.nombre} | {job.ubicacion}</small>
                 </div>
                 <button>Aplicar ahora</button>
     

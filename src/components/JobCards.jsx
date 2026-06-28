@@ -22,7 +22,7 @@ export function JobCard({ jobs }) {
                     <button disabled={isApplied} className={classButton} onClick={handleClick} >{text}</button>
                 )}
             </div>
-            <small>{jobs.empresa} | {jobs.ubicacion} </small>
+            <small>{jobs.Empresa.nombre} | {jobs.modalidad} ({jobs.ubicacion})</small>
             <p>{jobs.descripcion}</p>
         </article>
     )

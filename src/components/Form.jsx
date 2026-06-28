@@ -2,8 +2,7 @@ import { useId, useState, useEffect ,useRef} from 'react'
 export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFilterValue}) {
     const idText = useId();
     const idTech = useId();
-    const idLoc = useId();
-    const idContract = useId();
+    const idmod = useId();
     const idExp = useId()
     const [focusField, setFocusElement] = useState(null)
     const focusSearch = focusField ? 'is-focus' : ''
@@ -26,10 +25,8 @@ export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFil
             const formData = new FormData(event.currentTarget)
             const filters = {
                 tech: formData.get(idTech),
-                location: formData.get(idLoc),
-                contract: formData.get(idContract),
+                mod: formData.get(idmod),
                 idExp: formData.get(idExp)
-
             }
             if(timeOutId.current)
             {
@@ -64,27 +61,24 @@ export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFil
                     <select id="tech-filter" name={idTech} aria-label="Tecnologia" defaultValue={initialFilterValue.tech}>
                         <option value="">Tecnologia</option>
                         <option value="react">React</option>
-                        <option value="node.js">Node.js</option>
+                        <option value="node">Node.js</option>
                         <option value="python">Python</option>
                         <option value="javascript">JavaScript</option>
+                        <option value="typescript">TypeScript</option>
+                        <option value="java">Java</option>
                     </select>
-                    <select id="location-filter" name={idLoc} aria-label="Modalidad" defaultValue={initialFilterValue.location}>
+                    <select id="modalidad-filter" name={idmod} aria-label="Modalidad" defaultValue={initialFilterValue.mod}>
                         <option value=""  >Modalidad</option>
                         <option value="presencial">Presencial</option>
-                        <option value="semi-presencial">Semi-presencial</option>
+                        <option value="hibrido">Semi-presencial</option>
                         <option value="remoto">Remoto</option>
-                    </select>
-                    <select id="contract-filter" name={idContract} aria-label="Tipo de contrato" defaultValue={initialFilterValue.contract}>
-                        <option value="" >Tipo de contrato</option>
-                        <option value="full-time">Full-time</option>
-                        <option value="part-time">Part-time</option>
                     </select>
                     <select id="experience-filter" name={idExp} aria-label="Nivel de experiencia" defaultValue={initialFilterValue.idExp}>
                         <option value=""  >Nivel de experiencia</option>
                         <option value="junior">Junior</option>
                         <option value="senior">Senior</option>
+                        <option value="semi-senior">Semi senior</option>
                         <option value="engineer">Engineer</option>
-                        <option value="senior engineer">Senior engineer</option>
                     </select>
                     <input type="submit" value="Filtrar" hidden />
                     <button type='button' id="button-clear" onClick={handleClear}>Limpiar</button>

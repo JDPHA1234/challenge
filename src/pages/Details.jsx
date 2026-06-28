@@ -34,7 +34,6 @@ export default function Details(){
                 if (error) {
                     throw error
                     }
-              console.log(data)
                 setJob(data)
             } catch (error) {
                 SetError(error.message)

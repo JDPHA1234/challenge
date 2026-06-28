@@ -4,10 +4,11 @@ import { JobListing } from '../components/JobListing.jsx'
 import { Pagination } from '../components/Pagination.jsx'
 import { Spinner } from '../components/Spinner.jsx'
 import { useFilters } from '../hooks/useFilters.jsx'
-export default function Search() {
+export default function  Search() {
+    
     const {jobs, handleFilters, handleTextFilter, handleReset, currentPage, setCurrentPage, totalPages,loading, textSearch, filters} = useFilters()
     const condition = loading ? <Spinner/> : <JobListing joblist={jobs} /> 
-    useEffect(() => {
+    useEffect( () => {
         document.title = `Resultados : Pagina ${currentPage}`
     }, [currentPage])
     return (<main className="search-main">

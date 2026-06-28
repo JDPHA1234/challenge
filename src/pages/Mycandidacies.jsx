@@ -63,14 +63,6 @@ export default function Mycandidacies() {
 				<h1>Mis candidaturas</h1>
 				<p>Gestiona y haz seguimiento del estado de tus aplicaciones activas.</p>
 			</section>
-			<section className="candidacies-summary" aria-label="Resumen de candidaturas">
-				{summaryCards.map((card) => (
-					<article key={card.label} className={`candidacy-summary-card ${card.tone ? `tone-${card.tone}` : ''}`}>
-						<span>{card.label}</span>
-						<strong>{card.value}</strong>
-					</article>
-				))}
-			</section>
 
 			<section className="candidacies-list" aria-label="Lista de candidaturas">
 				{applications.map((job) => (

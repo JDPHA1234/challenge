@@ -17,6 +17,7 @@ function App() {
   const location = useLocation()
   const hideHeader = location.pathname === '/login' || location.pathname === '/register'
   const hideFooter = location.pathname === '/login' || location.pathname === '/register'
+
   return (
     <>
     {!hideHeader ? <Header /> : null}
@@ -25,7 +26,7 @@ function App() {
         <Route path='/details/:id' element={ <ProtectedRoute>
           <Details/>
         </ProtectedRoute>}/>
-        <Route path='/companies' element={<Empresa/>}/>
+        <Route path='/companies/:id' element={<Empresa/>}/>
         <Route path='/empresa' element={<SearchEmpresa/>}/>
         <Route path='/my-candidacies' element={<ProtectedRoute><Mycandidacies/></ProtectedRoute>}/>
         <Route path='/profile' element={<ProtectedRoute><FormPerfil/></ProtectedRoute>}/>

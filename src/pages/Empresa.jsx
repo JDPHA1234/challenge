@@ -1,5 +1,7 @@
 import { Link } from "../components/Link.jsx"
-
+import { supabase } from "../supabase-client.js"
+import { useState, useEffect, use } from "react"
+import { useParams } from 'react-router-dom'
 const stats = [
 	{ value: "98%", label: "Retención" },
 	{ value: "120+", label: "Proyectos" },
@@ -9,20 +11,20 @@ const stats = [
 
 const benefits = [
 	{
-		title: "Remoto First",
-		description: "Libertad total para trabajar desde donde mejor te sientas.",
+		"title": "Salario en USD",
+		"description": "Compensación 100% en dólares con bonos cuatrimestrales por rendimiento del fondo.",
 	},
 	{
-		title: "Salario Competitivo",
-		description: "Revisiones semestrales basadas en impacto y resultados.",
+		"title": "Salario Competitivo",
+		"description": "Revisiones semestrales basadas en impacto, desempeño y resultados del equipo.",
 	},
 	{
-		title: "Presupuesto para Formación",
-		description: "Hasta 2000€ anuales para cursos, libros y conferencias.",
+		"title": "Presupuesto para Formación",
+		"description": "Hasta 2000 USD anuales para cursos, libros, certificaciones y conferencias.",
 	},
 	{
-		title: "Bienestar & Salud",
-		description: "Seguro médico premium y suscripción a gimnasios.",
+		"title": "Bienestar & Salud",
+		"description": "Seguro médico premium de primera línea y suscripción gratuita a red de gimnasios.",
 	},
 ]
 
@@ -57,25 +59,73 @@ function SectionTitle({ title, subtitle }) {
 }
 
 export default function Empresa() {
+	const [loading, setLoading] = useState(true)
+	const [empresa, setEmpresa] = useState(null)
+	const [error, SetError] = useState(null)
+	const [trabajo, setTrabajo] = useState(null)
+	const { id } = useParams()
+	useEffect(() => {
+		async function fetchEmpresa() {
+			try {
+				const [empresaReq, trabajoReq] = await Promise.all([
+					supabase.from('Empresa').select('*').eq('id', 1).single(),
+					supabase.from('Trabajo').select('*').eq('idEmpresa', 1).limit(3),
+				]);
+
+				if (empresaReq.error) throw empresaReq.error;
+				if (trabajoReq.error) throw trabajoReq.error;
+
+				// Guardamos los estados
+				console.log(empresaReq.data, trabajoReq.data);
+				setEmpresa(empresaReq.data);
+				setTrabajo(trabajoReq.data);
+			} catch (error) {
+				SetError(error.message)
+				console.error('error fetching de datos', error)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchEmpresa()
+	}, [id])
+	if (loading) {
+		return (
+			<div>
+				<p>Cargando...</p>
+			</div>
+		)
+	}
+	if (error) {
+		return (
+			<div>
+				<p>No se pudo cargar la empresa.</p>
+			</div>
+		)
+	}
+
+	if (!empresa) {
+		return null
+	}
 	return (
 		<main className="company-page">
 			<section className="company-hero">
-				<img className="company-hero-image" src="/background.webp" alt="Oficina moderna con pantallas" />
+				<img className="company-hero-image" src={empresa.image_url} alt={empresa.nombre} />
 				<div className="company-hero-overlay" />
 				<div className="company-hero-content">
-					<div className="company-brand-card" aria-hidden="true">
-						<span>D</span>
+					<div aria-hidden="true">
+						<img src={empresa.logo_url} className="logo-empresa" alt={empresa.nombre} />
 					</div>
 					<div className="company-hero-copy">
-						<h1>DevJobs</h1>
+						<h1>{empresa.nombre}</h1>
 						<div className="company-badges">
 							<span>Tecnología & Software</span>
-							<span>Madrid, España</span>
-							<span>500+ empleados</span>
+							<span>{empresa.ubicacion}</span>
+							<span>{empresa.cant_empleados}+ empleados</span>
 						</div>
 					</div>
 					<div className="company-actions">
-						<a className="company-secondary-action" href="/search">
+						<a className="company-secondary-action" href={empresa.sitio_web_url} target="_blank" rel="noopener noreferrer">
 							Ver Sitio Web
 						</a>
 					</div>
@@ -87,13 +137,10 @@ export default function Empresa() {
 					<section className="company-card company-about-card">
 						<SectionTitle title="Sobre Nosotros" />
 						<p>
-							DevJobs no es solo una plataforma: es el nexo entre el talento excepcional y las
-							empresas que están definiendo el futuro. Nuestra misión es humanizar el proceso de
-							reclutamiento técnico, priorizando la cultura, las metas personales y la excelencia
-							en el código.
+							{empresa.descripcion}
 						</p>
 						<dl className="company-stats">
-							{stats.map((stat) => (
+							{empresa.stats && empresa.stats.map((stat) => (
 								<div key={stat.label}>
 									<dt>{stat.value}</dt>
 									<dd>{stat.label}</dd>
@@ -105,7 +152,7 @@ export default function Empresa() {
 					<section className="company-card">
 						<SectionTitle title="Beneficios" />
 						<div className="benefits-grid">
-							{benefits.map((benefit) => (
+							{empresa.benefits && empresa.benefits.map((benefit) => (
 								<article key={benefit.title} className="benefit-item">
 									<div className="benefit-icon" aria-hidden="true">
 										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -124,19 +171,20 @@ export default function Empresa() {
 				</div>
 
 				<aside className="company-card company-sidebar">
-					<SectionTitle title="Posiciones Abiertas" subtitle="4 activas" />
+					<SectionTitle title="Posiciones Abiertas"/>
 					<div className="open-positions">
-						{positions.map((position) => (
-							<article key={position.title} className="position-card">
-								<h3>{position.title}</h3>
-								<p className="position-meta">{position.meta}</p>
-								<p className="position-salary">{position.salary}</p>
+						{trabajo?.map((position) => (
+							<article key={position.titulo} className="position-card">
+								<h3>{position.titulo}</h3>
+								<p className="position-meta">{position.modalidad}({position.ubicacion})</p>
+								<p className="position-salary">{position.salarioMin}- {position.salarioMax}</p>
 								<div className="position-tags">
-									{position.tags.map((tag) => (
+									{position.technology && position.technology.map((tag) => (
 										<span key={tag}>{tag}</span>
 									))}
 								</div>
 							</article>
+							
 						))}
 					</div>
 					<Link href="/search" className="company-all-jobs">

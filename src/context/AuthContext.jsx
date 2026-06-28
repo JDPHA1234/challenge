@@ -1,21 +1,18 @@
 import { createContext ,useState,useContext} from "react"
+import { useAuthStore } from "../store/authStore";
+import { useEffect } from "react";
 export const AuthContext = createContext()
 
 export function AuthProvider({children}) {
-    const [isLoggedIn,setLogginIn] = useState(false)
-    const login = () => {
-        setLogginIn(true)
-    }
-    const logout = () => {
-        setLogginIn(false)
-    }
-    const value = {
-        isLoggedIn,
-        login,
-        logout
-    }
+    const { loading , getAuth } = useAuthStore();
+
+    useEffect(() => {
+        getAuth();
+    }, []);
+    // Si aún está cargando, mostramos el spinner globalmente
+    if (loading) return <Spinner />;
     return (
-        <AuthContext value={value}>
+        <AuthContext value={user}>
             {children}
         </AuthContext>
     )

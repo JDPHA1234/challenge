@@ -17,6 +17,39 @@ Para el desarrollo de este ecosistema se seleccionaron tecnologías modernas que
 * **Enrutado:** `React Router` para gestionar una experiencia SPA (Single Page Application) fluida a través de múltiples vistas.
 * **Estado Global:** `Zustand`, elegido por su enfoque minimalista, atómico y sin la sobrecarga (*boilerplate*) de Redux, ideal para mantener un flujo de datos limpio con Supabase.
 * **Backend & Base de Datos (BaaS):** `Supabase`, aprovechando el poder de PostgreSQL, la autenticación nativa y la facilidad para interactuar mediante su cliente de JS.
+## 🗄️ Arquitectura y Diseño de la Base de Datos
+
+Para soportar el sistema de búsqueda de empleos enfocado en el usuario, se diseñó una base de datos relacional robusta en **Supabase (PostgreSQL)**, optimizando las consultas de ofertas de trabajo y el historial de aplicaciones del postulante.
+
+### 📐 Diagramas del Sistema
+
+#### 1. Diagrama Entidad-Relación (DER)
+Este diagrama representa el modelo conceptual y las reglas de negocio establecidas para el dominio del proyecto (Relaciones Uno a Muchos entre Usuarios, Postulaciones y Empleos).
+
+<img width="1202" height="420" alt="imagen" src="https://github.com/user-attachments/assets/d2de0d12-35c9-4c06-9e11-1a4fc6d715e6" />
+
+
+#### 2. Modelo Relacional (Esquema de Tablas)
+Abstracción técnica que detalla las claves primarias (`PK`), claves foráneas (`FK`), tipos de datos y restricciones (*constraints*) aplicadas en la base de datos.
+
+<img width="988" height="580" alt="imagen" src="https://github.com/user-attachments/assets/e14d1d40-1c77-4372-b174-2320970399e5" />
+
+
+
+### 🚀 Implementación en Supabase
+
+A continuación, se detalla la estructura física y la configuración de las tablas principales directamente desde el panel de Supabase:
+
+#### 📊 Vista General de las Tablas (Schema Visual)
+El esquema se compone de las tablas esenciales para mitigar la complejidad del dominio: `users`, `jobs` (ofertas laborales) y `applications` (postulaciones).
+
+<img width="988" height="775" alt="imagen" src="https://github.com/user-attachments/assets/350d2090-aea6-428a-95a5-a6cc1e29adf4" />
+
+
+#### 🔐 Seguridad y Políticas (RLS - Row Level Security)
+*Opcional (si lo implementaste):* Se habilitó RLS en Supabase para asegurar que un usuario postulante solo pueda visualizar y gestionar sus propias postulaciones, protegiendo la integridad de los datos.
+
+<img width="1374" height="700" alt="imagen" src="https://github.com/user-attachments/assets/812e67b8-813a-46a0-af72-296e043baf2a" />
 
 ### 📐 Arquitectura de Carpetas
 Se optó por una arquitectura modular basada en características (*feature-driven/clean structure*), separando la lógica de negocio de los componentes visuales:
@@ -30,3 +63,62 @@ src/
 ├── supabase-client.js # Configuración del cliente de Supabase y tipos
 └── App.jsx            # Enrutador y punto de entrada
 ```
+## 🤖 Orquestación de IA y Aceleración de Desarrollo
+
+De acuerdo con los requerimientos del challenge, el desarrollo se ejecutó bajo un enfoque de **IA-Driven Development**, utilizando un entorno híbrido de asistentes avanzados para optimizar tiempos de entrega y focalizar el esfuerzo humano en la arquitectura, la lógica de negocio y el control de calidad.
+
+### 🛠️ Tooling Utilizado
+1. **Gemini Pro (Modelo Fundacional Principal):** Utilizado como arquitecto y consultor técnico de cabecera. Actuó en el diseño del modelo de datos de Supabase, la estructuración de las stores atómicas en Zustand y la resolución de abstracciones complejas en el enrutado con React Router.
+2. **GitHub Copilot (Student Suscripcion):** Integrado directamente en el IDE como motor de autocompletado predictivo y generación pragmática de *boilerplate* (componentes de UI repetitivos, tipados implícitos y esqueleto de funciones de fetching).
+
+### 📈 Estrategia de Orquestación y Criterio de Auditoría
+La velocidad de desarrollo se multiplicó delegando tareas mecánicas a la IA, manteniendo siempre el rol de **Auditor Principal del Código**:
+
+* **Generación vs. Contexto:** Se utilizó Gemini Pro mediante *prompts* modulares para escribir código limpio, evitando ventanas de contexto saturadas que introdujeran alucinaciones.
+* **Refactorización y QA Activo:** Cada bloque sugerido por Copilot o Gemini fue estrictamente auditado. Se corrigieron manualmente comportamientos inesperados en las re-renderizaciones de React, la sincronización de estados asíncronos y la sanitización de errores provenientes de las llamadas a Supabase.
+* **Resolución de Edge Cases:** El diseño del control de accesos, las rutas protegidas del flujo de postulantes y el manejo de estados de carga (*loading states*) se implementaron bajo criterio propio, complementando las limitaciones lógicas de los modelos.
+
+* ### ⚖️ Decisiones de Tooling y Trade-offs
+Frente a alternativas de agentes autónomos (como Claude Code o frameworks de OpenCode con agentes), se optó intencionalmente por un enfoque híbrido y **sin costos** de **Gemini Pro + GitHub Copilot** . Esta combinación permitió un control granular y directo sobre el flujo de datos y la arquitectura del código, mitigando el riesgo de alucinaciones en bucle o la generación de código redundante (*bloatware*), garantizando así un desarrollo ágil, limpio y auditable en el corto plazo del challenge.
+
+## 🚀 Instalación y Ejecución Local
+
+Seguí estos pasos para clonar el repositorio y levantar el entorno de desarrollo en tu máquina:
+
+### 📋 Prerrequisitos
+Asegurate de tener instalado [Node.js](https://nodejs.org/) (versión 18 o superior) y `npm`.
+
+### 1. Clonar el repositorio
+Cloná el proyecto utilizando SSH o HTTPS y unite a la carpeta raíz:
+```bash
+git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
+cd TU_REPOSITORIO
+```
+### 2. Instalar dependencias
+
+Instalá los paquetes necesarios para React, Vite, Zustand y Supabase:
+```bash
+npm install 
+```
+### 3. Configurar variables de entorno
+
+El proyecto requiere conectarse a tu instancia de Supabase.
+
+    Creá un archivo llamado .env en la raíz del proyecto.
+
+    Copiá y completá las siguientes variables con tus credenciales del panel de Supabase (Project Settings > API):
+    VITE_SUPABASE_URL=tu_supabase_url_aqui
+    VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key_aqui
+### 4. Ejecutar la aplicación
+
+Levantá el servidor de desarrollo local de Vite:
+```Bash
+npm run dev
+```
+###Scripts Disponibles
+
+    npm run dev: Arranca el servidor de desarrollo con Hot Module Replacement (HMR).
+
+    npm run build: Compila y optimiza la aplicación para producción (genera la carpeta dist/).
+
+    npm run preview: Permite previsualizar de forma local la configuración de producción.

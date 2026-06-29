@@ -1,7 +1,7 @@
 import { AsideProfile } from '../components/AsideProfile'
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase-client.js'
-import{ useAuthStore } from '../store/authStore.js'
+import { useAuthStore } from '../store/authStore.js'
 import { NavLink } from 'react-router'
 const summaryCards = [
 	{ label: 'Total', value: '12', tone: '' },
@@ -57,15 +57,15 @@ function StatusBadge({ tone, children }) {
 	return <span className={`candidacy-status candidacy-${tone}`}>{children}</span>
 }
 const formatearFecha = (fechaISO) => {
-  if (!fechaISO) return ''; // Por si la fecha viene vacía
-  
-  const fecha = new Date(fechaISO);
-  
-  return fecha.toLocaleDateString('es-AR', {
-    day: '2-digit',
-    month: 'short', // o 'long' para "junio" completo
-    year: 'numeric'
-  });
+	if (!fechaISO) return ''; // Por si la fecha viene vacía
+
+	const fecha = new Date(fechaISO);
+
+	return fecha.toLocaleDateString('es-AR', {
+		day: '2-digit',
+		month: 'short', // o 'long' para "junio" completo
+		year: 'numeric'
+	});
 };
 
 export default function Mycandidacies() {
@@ -101,26 +101,26 @@ export default function Mycandidacies() {
 			} catch (error) {
 				setError(error.message)
 				console.error('Error al obtener las solicitudes:', error.message);
-			}finally{
+			} finally {
 				setLoading(false) // Terminamos la carga
 			}
 		}
 		obtenerMisSolicitudes(useAuthStore.getState().user.id)
-	},[])
-	 if(loading){
-            return (
-                <div>
-                    <p>Cargando...</p>
-                </div>
-            )
-        }
-        if(error){
-            return (
-                <div>
-                    <p>No se pudo cargar las solicitudes.</p>
-                </div>
-            )
-        }
+	}, [])
+	if (loading) {
+		return (
+			<div>
+				<p>Cargando...</p>
+			</div>
+		)
+	}
+	if (error) {
+		return (
+			<div>
+				<p>No se pudo cargar las solicitudes.</p>
+			</div>
+		)
+	}
 	return (
 		<div className="appConteiner">
 			<AsideProfile />

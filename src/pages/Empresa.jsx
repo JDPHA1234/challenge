@@ -68,8 +68,8 @@ export default function Empresa() {
 		async function fetchEmpresa() {
 			try {
 				const [empresaReq, trabajoReq] = await Promise.all([
-					supabase.from('Empresa').select('*').eq('id', 1).single(),
-					supabase.from('Trabajo').select('*').eq('idEmpresa', 1).limit(3),
+					supabase.from('Empresa').select('*').eq('id', id).single(),
+					supabase.from('Trabajo').select('*').eq('idEmpresa', id).limit(3),
 				]);
 
 				if (empresaReq.error) throw empresaReq.error;

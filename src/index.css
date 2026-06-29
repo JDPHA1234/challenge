@@ -1500,5 +1500,173 @@ input:-webkit-autofill:active {
 h1, h2, p , small, span{
   text-transform: capitalize;
 }
+/* Contenedor principal con el fondo oscuro del mockup */
+.empresas-container {
+    padding: 2rem;
+    background-color: #0b1120; /* Color de fondo oscuro */
+    min-height: 100vh;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, sans-serif;
+}
 
+.empresas-loading {
+    color: white;
+    text-align: center;
+    padding: 3rem;
+}
+
+/* Header */
+.empresas-header {
+    margin-bottom: 2rem;
+    max-width: 1200px;
+    margin-inline: auto; /* Centra el contenido horizontalmente */
+}
+
+.empresas-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+}
+
+.empresas-header p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+/* * EL SISTEMA GRID (Máximo 3 columnas)
+ */
+.empresas-grid {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    
+    /* Por defecto (Celulares): 1 columna */
+    grid-template-columns: 1fr;
+}
+
+/* Tablets (pantallas medianas): 2 columnas */
+@media (min-width: 768px) {
+    .empresas-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop (pantallas grandes): 3 columnas como máximo */
+@media (min-width: 1024px) {
+    .empresas-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tarjeta de la empresa */
+.empresa-card {
+    background-color: #111827; /* Fondo un poco más claro que el body */
+    border: 1px solid #1f2937;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.empresa-card:hover {
+    border-color: #374151;
+    transform: translateY(-2px); /* Pequeño efecto de elevación al pasar el mouse */
+}
+
+/* Cabecera de la tarjeta (Logo y Titulo) */
+.empresa-card-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.empresa-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.5rem;
+    background-color: #000;
+    object-fit: cover;
+    border: 1px solid #1f2937;
+}
+
+.empresa-info-top h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.4rem 0;
+    color: #f8fafc;
+}
+
+/* Etiquetas (Badges) */
+.empresa-badges {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background-color: #1e3a8a;
+    color: #bfdbfe;
+}
+
+.badge-secondary {
+    color: #94a3b8;
+    font-weight: normal;
+    padding: 0; /* Quitamos padding para que se vea como texto simple al lado del badge */
+}
+
+/* Descripción truncada a 3 líneas */
+.empresa-descripcion {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Esto empuja el footer siempre hacia abajo */
+    
+    /* Magia para truncar el texto a 3 líneas */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Footer (Ubicación y Enlace) */
+.empresa-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1f2937;
+    padding-top: 1rem;
+    font-size: 0.8rem;
+}
+
+.empresa-ubicacion {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+}
+
+.empresa-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.empresa-link:hover {
+    color: #ffffff;
+}
 

@@ -12,7 +12,8 @@ const FormPerfil = lazy(() => import('./pages/FormPerfil.jsx'))
 const Empresa = lazy(() => import('./pages/Empresa.jsx'))
 const Mycandidacies = lazy(() => import('./pages/Mycandidacies.jsx'))
 const Page404 = lazy(() => import('./pages/404.jsx'))
-const SearchEmpresa = lazy(() => import('./pages/SearchEmpresa.jsx'))
+const EmpresasPage = lazy(() => import('./pages/EmpresasPage.jsx'))
+
 function App() {
   const location = useLocation()
   const hideHeader = location.pathname === '/login' || location.pathname === '/register'
@@ -26,8 +27,8 @@ function App() {
         <Route path='/details/:id' element={ <ProtectedRoute>
           <Details/>
         </ProtectedRoute>}/>
-        <Route path='/companies/:id' element={<Empresa/>}/>
-        <Route path='/empresa' element={<SearchEmpresa/>}/>
+        <Route path='/companie/:id' element={<Empresa/>}/>
+        <Route path='/companies' element={<EmpresasPage/>}/>
         <Route path='/my-candidacies' element={<ProtectedRoute><Mycandidacies/></ProtectedRoute>}/>
         <Route path='/profile' element={<ProtectedRoute><FormPerfil/></ProtectedRoute>}/>
         <Route path='/' element={<Home />} />

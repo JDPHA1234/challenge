@@ -1637,6 +1637,7 @@ h1, h2, p , small, span{
     /* Magia para truncar el texto a 3 líneas */
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;

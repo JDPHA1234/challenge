@@ -9,7 +9,7 @@ export default function FormPerfil() {
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [profileImage, setProfileImage] = useState(null); // Estado para la imagen de perfil
-    const [cv,setCv] = useState(null); // Estado para el CV
+    const [cv, setCv] = useState(null); // Estado para el CV
     const idName = useId();
     // Estado para guardar los datos de la base de datos
     const [perfil, setPerfil] = useState({
@@ -20,8 +20,8 @@ export default function FormPerfil() {
         cargo: '',
         empresa: '',
         experiencia: '',
-        avatar_url: '' ,
-        cv_url: '' ,
+        avatar_url: '',
+        cv_url: '',
     });
 
     // 1. CARGAR DATOS AL INICIAR
@@ -66,19 +66,19 @@ export default function FormPerfil() {
             setProfileImage(event.target.files[0])
         }
     }
-     const handleFileChangePDF = (event) => {
+    const handleFileChangePDF = (event) => {
         if (event.target.files && event.target.files.length > 0) {
             setCv(event.target.files[0])
         }
     }
     const uploadcv = async (file) => {
-        const fileExt = file.name.split('.').pop(); 
-    
-    // 2. Generamos un nombre totalmente limpio (ej: "1782697189851.pdf")
-    const fileName = `${Date.now()}.${fileExt}`;
-    
-    // Opcional pero recomendado: guardarlo en una carpeta con el ID del usuario
-    const filePath = `${user.id}/${fileName}`;
+        const fileExt = file.name.split('.').pop();
+
+        // 2. Generamos un nombre totalmente limpio (ej: "1782697189851.pdf")
+        const fileName = `${Date.now()}.${fileExt}`;
+
+        // Opcional pero recomendado: guardarlo en una carpeta con el ID del usuario
+        const filePath = `${user.id}/${fileName}`;
         const { error } = await supabase.storage
             .from('PDFs')
             .upload(filePath, file)
@@ -91,13 +91,13 @@ export default function FormPerfil() {
         return data.publicUrl
     }
     const uploadProfileImage = async (file) => {
-        const fileExt = file.name.split('.').pop(); 
-    
-    // 2. Generamos un nombre totalmente limpio (ej: "1782697189851.pdf")
-    const fileName = `${Date.now()}.${fileExt}`;
-    
-    // Opcional pero recomendado: guardarlo en una carpeta con el ID del usuario
-    const filePath = `${user.id}/${fileName}`;
+        const fileExt = file.name.split('.').pop();
+
+        // 2. Generamos un nombre totalmente limpio (ej: "1782697189851.pdf")
+        const fileName = `${Date.now()}.${fileExt}`;
+
+        // Opcional pero recomendado: guardarlo en una carpeta con el ID del usuario
+        const filePath = `${user.id}/${fileName}`;
         const { error } = await supabase.storage
             .from('profileimages')
             .upload(filePath, file)
@@ -114,8 +114,8 @@ export default function FormPerfil() {
         event.preventDefault();
 
 
-        const formData = new FormData(event.currentTarget);   
-        
+        const formData = new FormData(event.currentTarget);
+
         let imageurl = null
         if (profileImage) {
             imageurl = await uploadProfileImage(profileImage);
@@ -153,15 +153,27 @@ export default function FormPerfil() {
             alert('Hubo un error al guardar los cambios');
         }
     };
+    useEffect(() => {
+        // Solo intentamos hacer scroll si ya terminó de cargar la base de datos
+        if (!isLoading && location.hash === '#seccion-cv') {
+            const elemento = document.getElementById('seccion-cv');
 
+            if (elemento) {
+                // Un pequeño retraso asegura que React ya terminó de pintar el HTML
+                setTimeout(() => {
+                    elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
+        }
+    }, [isLoading, location.hash]);
     // Lógica dinámica para la UI
     const textButton = isEditing ? 'Guardar Cambios' : 'Editar';
     const typeButton = isEditing ? 'submit' : 'button';
 
     if (isLoading) return <div className="appConteiner"><p>Cargando perfil...</p></div>;
-    const avatarSrc = profileImage 
-    ? URL.createObjectURL(profileImage) 
-    : (perfil.avatar_url || 'https://via.placeholder.com/150?text=Avatar');
+    const avatarSrc = profileImage
+        ? URL.createObjectURL(profileImage)
+        : (perfil.avatar_url || 'https://via.placeholder.com/150?text=Avatar');
     return (
         <div className="appConteiner">
             <AsideProfile />
@@ -208,41 +220,41 @@ export default function FormPerfil() {
                         </div>
                     </div>
                     <div className="avatarUploadDiv">
-    <h3>Imagen de Perfil</h3>
-    <label 
-        htmlFor="IMAGEN" 
-        className={`avatar-label ${!isEditing ? 'disabled' : ''}`}
-        style={{ opacity: isEditing ? 1 : 0.7, cursor: isEditing ? 'pointer' : 'not-allowed' }}
-    >
-        <div className="avatar-preview">
-            {/* Aquí mostramos la imagen real o la vista previa */}
-            <img src={avatarSrc} alt="Perfil" className="avatar-img" />
-            
-            {/* Este overlay oscuro con la cámara solo aparece si estamos editando */}
-            {isEditing && (
-                <div className="avatar-overlay">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
-                        <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                    </svg>
-                    <span>Cambiar</span>
-                </div>
-            )}
-        </div>
-        <input 
-            type="file" 
-            name="IMAGEN" 
-            accept="image/*" 
-            id="IMAGEN" 
-            hidden 
-            disabled={!isEditing} 
-            onChange={handleFileChangeImage} 
-        />
-    </label>
-</div>
+                        <h3>Imagen de Perfil</h3>
+                        <label
+                            htmlFor="IMAGEN"
+                            className={`avatar-label ${!isEditing ? 'disabled' : ''}`}
+                            style={{ opacity: isEditing ? 1 : 0.7, cursor: isEditing ? 'pointer' : 'not-allowed' }}
+                        >
+                            <div className="avatar-preview">
+                                {/* Aquí mostramos la imagen real o la vista previa */}
+                                <img src={avatarSrc} alt="Perfil" className="avatar-img" />
 
-                    <div className="cvDiv">
+                                {/* Este overlay oscuro con la cámara solo aparece si estamos editando */}
+                                {isEditing && (
+                                    <div className="avatar-overlay">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
+                                            <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                                        </svg>
+                                        <span>Cambiar</span>
+                                    </div>
+                                )}
+                            </div>
+                            <input
+                                type="file"
+                                name="IMAGEN"
+                                accept="image/*"
+                                id="IMAGEN"
+                                hidden
+                                disabled={!isEditing}
+                                onChange={handleFileChangeImage}
+                            />
+                        </label>
+                    </div>
+
+                    <div className="cvDiv" id="seccion-cv">
                         <h3>CV</h3>
                         <label id="CvUpload" style={{ opacity: isEditing ? 1 : 0.5, cursor: isEditing ? 'pointer' : 'not-allowed' }}>
                             <input type="file" accept=".pdf,.doc,.docx" hidden disabled={!isEditing} onChange={handleFileChangePDF} />

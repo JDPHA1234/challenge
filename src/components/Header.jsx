@@ -1,11 +1,20 @@
-import { Link } from "./Link.jsx"
 import { NavLink } from "react-router-dom"
 import { useAuthStore } from "../store/authStore.js"
+
 export function Header() {
-    const {isLoggedIn , avatar_url} = useAuthStore()
-    const loginButton = isLoggedIn ? 
-        <img src={avatar_url} alt="Foto del usuario" />  : <NavLink to="/login">Iniciar Sesion</NavLink>
-    const uploadcv = isLoggedIn ? <NavLink to="/profile">Subir CV</NavLink> : null
+    const { isLoggedIn, avatar_url } = useAuthStore()
+    
+    // Ahora la imagen es un enlace con una clase especial
+    const loginButton = isLoggedIn ? (
+        <NavLink to="/profile" className="avatar-link">
+            <img src={avatar_url} alt="Foto del usuario" />
+        </NavLink>
+    ) : (
+        <NavLink to="/login">Iniciar Sesion</NavLink>
+    );
+    
+    const uploadcv = isLoggedIn ? <NavLink to="/profile#seccion-cv">Subir CV</NavLink> : null
+    
     return (
         <header>
             <h1>
@@ -25,5 +34,6 @@ export function Header() {
                 {uploadcv}
                 {loginButton}
             </div>
-        </header>)
+        </header>
+    )
 }

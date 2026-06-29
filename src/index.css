@@ -1669,4 +1669,14 @@ h1, h2, p , small, span{
 .empresa-link:hover {
     color: #ffffff;
 }
+header div a.avatar-link {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 50%;
+    display: flex;
+}
 
+header div a.avatar-link:hover img {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+}

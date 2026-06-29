@@ -35,7 +35,7 @@ export default function EmpresasPage() {
     return (
         <div className="empresas-container">
             <header className="empresas-header">
-                <h1>Resultados de Empresa</h1>
+                <h1>Empresas Asociadas con Devjobs</h1>
             </header>
 
             <main className="empresas-grid">

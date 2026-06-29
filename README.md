@@ -24,7 +24,7 @@ Para soportar el sistema de búsqueda de empleos enfocado en el usuario, se dise
 ### 📐 Diagramas del Sistema
 
 #### 1. Diagrama Entidad-Relación (DER)
-Este diagrama representa el modelo conceptual y las reglas de negocio establecidas para el dominio del proyecto (Relaciones Uno a Muchos entre Usuarios, Postulaciones y Empleos).
+Este diagrama representa el modelo conceptual y las reglas de negocio establecidas para el dominio del proyecto (Relaciones Uno a Muchos entre Usuarios, Solicitudes y Trabajos).
 
 <img width="1202" height="420" alt="imagen" src="https://github.com/user-attachments/assets/d2de0d12-35c9-4c06-9e11-1a4fc6d715e6" />
 
@@ -41,13 +41,13 @@ Abstracción técnica que detalla las claves primarias (`PK`), claves foráneas 
 A continuación, se detalla la estructura física y la configuración de las tablas principales directamente desde el panel de Supabase:
 
 #### 📊 Vista General de las Tablas (Schema Visual)
-El esquema se compone de las tablas esenciales para mitigar la complejidad del dominio: `users`, `jobs` (ofertas laborales) y `applications` (postulaciones).
+El esquema se compone de las tablas esenciales para mitigar la complejidad del dominio: `usuario`, `trabajo` (ofertas laborales) y `solicitud` (postulaciones).
 
 <img width="988" height="775" alt="imagen" src="https://github.com/user-attachments/assets/350d2090-aea6-428a-95a5-a6cc1e29adf4" />
 
 
 #### 🔐 Seguridad y Políticas (RLS - Row Level Security)
-*Opcional (si lo implementaste):* Se habilitó RLS en Supabase para asegurar que un usuario postulante solo pueda visualizar y gestionar sus propias postulaciones, protegiendo la integridad de los datos.
+Se habilitó RLS en Supabase para asegurar que un usuario postulante solo pueda visualizar y gestionar sus propias postulaciones, protegiendo la integridad de los datos.
 
 <img width="1374" height="700" alt="imagen" src="https://github.com/user-attachments/assets/812e67b8-813a-46a0-af72-296e043baf2a" />
 

@@ -8,7 +8,7 @@ export function JobCard({ jobs }) {
     const { isLoggedIn, user } = useAuthStore() 
     const [loading, setLoading] = useState(true) // Estado para manejar la carga de la solicitud
     const [isApplied, setApplied] = useState(false)
-
+    const [tieneCV, setTieneCV] = useState(false) // Estado para verificar si el usuario tiene CV
     // 2. VERIFICAR AL CARGAR: Revisamos si ya existe la solicitud en la base de datos
     useEffect(() => {
         async function checkApplication() {
@@ -42,12 +42,35 @@ export function JobCard({ jobs }) {
     const handleClick = async () => {
         if (!user) return; // Validación de seguridad extra
         setLoading(true); // Iniciamos la carga mientras hacemos la solicitud
-        const solicitud = {
+        let solicitud = {
             idTrabajo: jobs.id, 
             idUsuario: user.id, // Sacamos el ID directamente del user del store
             status: "pendiente",
-            cvSolicitud_url: "https://tudominio.com/ruta-al-cv.pdf" // Recuerda cambiar esto por el real
+            cvSolicitud_url: null// Recuerda cambiar esto por el real
         };
+
+        try {
+            const { data, error } = await supabase
+                .from('usuario')
+                .select('cv_url')
+                .eq('id', user.id)
+                .maybeSingle();
+                
+            if (error) {
+                throw new Error(error.message);
+            }
+            solicitud.cvSolicitud_url = data?.cv_url || null;
+        }catch (error) {
+            console.error('Error al enviar la solicitud:', error.message);
+        }
+
+        if (solicitud.cvSolicitud_url) {
+            setTieneCV(true);
+        }else {
+            return (
+                alert("No tienes un CV cargado. Por favor, sube tu CV en tu perfil antes de aplicar.")
+            )
+        }
 
         try {
             const { data, error } = await supabase

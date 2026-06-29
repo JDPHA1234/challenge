@@ -1,5 +1,8 @@
 import { AsideProfile } from '../components/AsideProfile'
-
+import { useEffect, useState } from 'react'
+import { supabase } from '../supabase-client.js'
+import{ useAuthStore } from '../store/authStore.js'
+import { NavLink } from 'react-router'
 const summaryCards = [
 	{ label: 'Total', value: '12', tone: '' },
 	{ label: 'En revisión', value: '4', tone: 'warning' },
@@ -53,47 +56,109 @@ const applications = [
 function StatusBadge({ tone, children }) {
 	return <span className={`candidacy-status candidacy-${tone}`}>{children}</span>
 }
+const formatearFecha = (fechaISO) => {
+  if (!fechaISO) return ''; // Por si la fecha viene vacía
+  
+  const fecha = new Date(fechaISO);
+  
+  return fecha.toLocaleDateString('es-AR', {
+    day: '2-digit',
+    month: 'short', // o 'long' para "junio" completo
+    year: 'numeric'
+  });
+};
 
 export default function Mycandidacies() {
+	const [loading, setLoading] = useState(true)
+	const [applications, setApplications] = useState([])
+	const [error, setError] = useState(null)
+	useEffect(() => {
+		async function obtenerMisSolicitudes(userId) {
+			try {
+				const { data, error } = await supabase
+					.from('Solicitud')
+					.select(`
+        created_at,
+        status,
+		cvSolicitud_url,
+        Trabajo (
+          titulo,
+          ubicacion,
+          modalidad,
+          Empresa (
+            nombre
+          )
+        )
+      `)
+					.eq('idUsuario', userId);
+
+				if (error) {
+					throw error;
+				}
+				console.log('Solicitudes obtenidas:', data);
+				setApplications(data)
+
+			} catch (error) {
+				setError(error.message)
+				console.error('Error al obtener las solicitudes:', error.message);
+			}finally{
+				setLoading(false) // Terminamos la carga
+			}
+		}
+		obtenerMisSolicitudes(useAuthStore.getState().user.id)
+	},[])
+	 if(loading){
+            return (
+                <div>
+                    <p>Cargando...</p>
+                </div>
+            )
+        }
+        if(error){
+            return (
+                <div>
+                    <p>No se pudo cargar las solicitudes.</p>
+                </div>
+            )
+        }
 	return (
-        <div className="appConteiner">
-        <AsideProfile/>
-		<main className="candidacies-page">
-			<section className="candidacies-header">
-				<h1>Mis candidaturas</h1>
-				<p>Gestiona y haz seguimiento del estado de tus aplicaciones activas.</p>
-			</section>
+		<div className="appConteiner">
+			<AsideProfile />
+			<main className="candidacies-page">
+				<section className="candidacies-header">
+					<h1>Mis candidaturas</h1>
+					<p>Gestiona y haz seguimiento del estado de tus aplicaciones activas.</p>
+				</section>
+				<section className="candidacies-list" aria-label="Lista de candidaturas">
+					{applications.map((app) => (
+						<article key={`${app.Trabajo.titulo}-${app.created_at}`} className="candidacy-item">
+							<div className="candidacy-icon" aria-hidden="true">
+								<span>{app.Trabajo.titulo.slice(0, 1)}</span>
+							</div>
 
-			<section className="candidacies-list" aria-label="Lista de candidaturas">
-				{applications.map((job) => (
-					<article key={`${job.title}-${job.date}`} className="candidacy-item">
-						<div className="candidacy-icon" aria-hidden="true">
-							<span>{job.title.slice(0, 1)}</span>
-						</div>
+							<div className="candidacy-main">
+								<h2>{app.Trabajo.titulo}</h2>
+								<p>
+									{app.Trabajo.Empresa.nombre} <span aria-hidden="true">•</span> {app.Trabajo.ubicacion}
+								</p>
+							</div>
 
-						<div className="candidacy-main">
-							<h2>{job.title}</h2>
-							<p>
-								{job.company} <span aria-hidden="true">•</span> {job.location}
-							</p>
-						</div>
+							<div className="candidacy-meta">
+								<span className="candidacy-applied-label">Aplicado el</span>
+								<strong>{formatearFecha(app.created_at)}</strong>
+							</div>
 
-						<div className="candidacy-meta">
-							<span className="candidacy-applied-label">Aplicado el</span>
-							<strong>{job.date}</strong>
-						</div>
+							<StatusBadge tone='info'>{app.status}</StatusBadge>
 
-						<StatusBadge tone={job.badgeTone}>{job.status}</StatusBadge>
+							<a href={app.cvSolicitud_url} target="_blank" rel="noopener noreferrer" className="candidacy-arrow" aria-label={`Ver CV de ${app.Trabajo.titulo}`}>
+								›
+							</a>
+						</article>
+					))}
+				</section>
 
-						<button type="button" className="candidacy-arrow" aria-label={`Ver detalles de ${job.title}`}>
-							›
-						</button>
-					</article>
-				))}
-			</section>
+			</main>
 
-		</main>
-
-        </div>
+		</div>
 	)
 }

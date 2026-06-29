@@ -1,18 +1,32 @@
-# React + Vite
+# Challenge Técnico: Software Engineer Web - AranguriApps
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## 📝 Descripción del Proyecto
+>[Este proyecto es una plataforma ágil de **Búsqueda de Empleos** enfocada en optimizar la experiencia del usuario (postulante). Con el objetivo de mitigar la complejidad del dominio dentro del tiempo establecido para el challenge, el sistema se centra exclusivamente en la **perspectiva y los flujos del cliente/usuario final** (Búsqueda, visualización de ofertas y gestión de postulaciones).]
+>Casos de uso 
+<img width="631" height="725" alt="imagen" src="https://github.com/user-attachments/assets/9a965355-663c-47e5-a4f5-55c532b407c9" />
 
-Currently, two official plugins are available:
+La aplicación está diseñada bajo un enfoque funcional, robusto y escalable, priorizando la experiencia de usuario (UI/UX) y la consistencia del estado global en el frontend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🛠️ Stack Tecnológico y Arquitectura
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Para el desarrollo de este ecosistema se seleccionaron tecnologías modernas que garantizan un alto rendimiento y un workflow ágil:
 
-Note: This will impact Vite dev & build performances.
+* **Frontend:** `React` (v18+) con `Vite` como empaquetador por su velocidad de compilación y Hot Module Replacement eficiente.
+* **Enrutado:** `React Router` para gestionar una experiencia SPA (Single Page Application) fluida a través de múltiples vistas.
+* **Estado Global:** `Zustand`, elegido por su enfoque minimalista, atómico y sin la sobrecarga (*boilerplate*) de Redux, ideal para mantener un flujo de datos limpio con Supabase.
+* **Backend & Base de Datos (BaaS):** `Supabase`, aprovechando el poder de PostgreSQL, la autenticación nativa y la facilidad para interactuar mediante su cliente de JS.
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### 📐 Arquitectura de Carpetas
+Se optó por una arquitectura modular basada en características (*feature-driven/clean structure*), separando la lógica de negocio de los componentes visuales:
+```text
+src/
+├── components/        # Componentes atómicos y reutilizables de UI
+├── context/           # Context for auth test
+├── hooks/             # Custom hooks para encapsular lógica de Supabase/fetching
+├── pages/             # Vistas principales de la aplicación 
+├── store/             # Stores de Zustand para el manejo del estado global
+├── supabase-client.js # Configuración del cliente de Supabase y tipos
+└── App.jsx            # Enrutador y punto de entrada
+```

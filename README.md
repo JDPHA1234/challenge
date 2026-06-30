@@ -13,7 +13,8 @@ La aplicación está diseñada bajo un enfoque funcional, robusto y escalable, p
 
 Para el desarrollo de este ecosistema se seleccionaron tecnologías modernas que garantizan un alto rendimiento y un workflow ágil:
 
-* **Frontend:** `React` (v18+) con `Vite` como empaquetador por su velocidad de compilación y Hot Module Replacement eficiente.
+* **Frontend:** `React` (v18+) con `Vite` como empaquetador. 
+  > **Criterio de Selección (Vite vs. Next.js):** Se optó intencionalmente por Vite por encima de Next.js debido a la naturaleza y el alcance del proyecto. Al tratarse de una aplicación enfocada exclusivamente en la vista del usuario y la simulación de flujos de postulación, la arquitectura de una **SPA (Single Page Application)** es óptima y suficiente. Next.js introduce características avanzadas como SSR (Server-Side Rendering) y optimización SEO en el servidor que no son críticas para este dashboard privado, añadiendo una sobrecarga (*overhead*) innecesaria de configuración y despliegue. Con Vite se garantiza la máxima velocidad de desarrollo, compilación instantánea y una experiencia de usuario fluida delegando el almacenamiento y estado de sesión liviano en el cliente de forma eficiente.
 * **Enrutado:** `React Router` para gestionar una experiencia SPA (Single Page Application) fluida a través de múltiples vistas.
 * **Estado Global:** `Zustand`, elegido por su enfoque minimalista, atómico y sin la sobrecarga (*boilerplate*) de Redux, ideal para mantener un flujo de datos limpio con Supabase.
 * **Backend & Base de Datos (BaaS):** `Supabase`, aprovechando el poder de PostgreSQL, la autenticación nativa y la facilidad para interactuar mediante su cliente de JS.
@@ -69,7 +70,8 @@ De acuerdo con los requerimientos del challenge, el desarrollo se ejecutó bajo 
 
 ### 🛠️ Tooling Utilizado
 1. **Gemini Pro (Modelo Fundacional Principal):** Utilizado como arquitecto y consultor técnico de cabecera. Actuó en el diseño del modelo de datos de Supabase, la estructuración de las stores atómicas en Zustand y la resolución de abstracciones complejas en el enrutado con React Router.
-2. **GitHub Copilot (Student Suscripcion):** Integrado directamente en el IDE como motor de autocompletado predictivo y generación pragmática de *boilerplate* (componentes de UI repetitivos, tipados implícitos y esqueleto de funciones de fetching).
+2. **GitHub Copilot (Copiloto):** Integrado directamente en el IDE como motor de autocompletado predictivo y generación pragmática de *boilerplate* (componentes de UI repetitivos, tipados implícitos y esqueleto de funciones de fetching).
+3. **Stitch IA (Diseño y UI/UX):** Herramienta clave utilizada para el prototipado rápido, la definición del sistema de diseño (paleta de colores, espaciados y consistencia visual) y la estructuración estética de la interfaz. Esto permitió alcanzar una alta fidelidad visual y atención al detalle en las vistas sin comprometer el tiempo de desarrollo lógico.
 
 ### 📈 Estrategia de Orquestación y Criterio de Auditoría
 La velocidad de desarrollo se multiplicó delegando tareas mecánicas a la IA, manteniendo siempre el rol de **Auditor Principal del Código**:

@@ -37,10 +37,12 @@ export function useFilters() {
     const [total, setTotal] = useState(0)
     const [jobs, setJobs] = useState([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
     useEffect(() => {
         async function getJobs() {
             try {
                 setLoading(true);
+                setError(null);
                 let query = supabase
                     .from('Trabajo')
                     .select(`
@@ -68,9 +70,12 @@ export function useFilters() {
                 if (error) throw error
 
                 // 5. Actualizamos los estados
-                setTotal(count)
-                setJobs(data)
+                setTotal(count ?? 0)
+                setJobs(data ?? [])
             } catch (error) {
+                setJobs([])
+                setTotal(0)
+                setError(error.message)
                 console.error('Error fetching de datos', error);
             } finally {
                 setLoading(false);
@@ -108,6 +113,7 @@ export function useFilters() {
         setCurrentPage,
         totalPages,
         loading,
+        error,
         filters
     }
 }

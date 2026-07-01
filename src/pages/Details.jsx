@@ -3,6 +3,7 @@ import { Link } from '../components/Link.jsx'
 import { useParams } from 'react-router-dom'
 import snarkdown from 'snarkdown'
 import { supabase } from '../supabase-client.js'
+import { Spinner } from '../components/Spinner.jsx'
 function JobDetails({title,content}) {
     const html = content ? snarkdown(content) : ''
     return (
@@ -23,6 +24,8 @@ export default function Details(){
     useEffect(() => {
         async function fetchJob() {
             try {
+                setLoading(true)
+                SetError(null)
                 const { data, error } = await supabase.from('Trabajo').select(
                 `titulo,
                 ubicacion,
@@ -34,6 +37,9 @@ export default function Details(){
                 if (error) {
                     throw error
                     }
+                if (!data) {
+                    throw new Error('No se encontró la oferta solicitada.')
+                }
                 setJob(data)
             } catch (error) {
                 SetError(error.message)
@@ -46,16 +52,12 @@ export default function Details(){
         fetchJob()
     }, [id])
         if(loading){
-            return (
-                <div>
-                    <p>Cargando...</p>
-                </div>
-            )
+            return <Spinner />
         }
         if(error){
             return (
-                <div>
-                    <p>No se pudo cargar el empleo.</p>
+                <div className="loginError">
+                    <p>{error}</p>
                 </div>
             )
         }

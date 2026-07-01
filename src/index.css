@@ -177,6 +177,27 @@ header div a {
   font-weight: 700;
 }
 
+header div button.header-action {
+  min-height: 42px;
+  padding: 0.7rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  color: white;
+}
+
+header div button.header-action:hover,
+header div button.header-action:focus-visible {
+  transform: translateY(-1px);
+  outline: 2px solid rgba(9, 153, 255, 0.35);
+  outline-offset: 2px;
+}
+
+header div button.header-logout {
+  background: rgba(255, 255, 255, 0.06);
+}
+
 header div a:first-child {
   background: var(--primary-dark);
   color: var(--primary-light);
@@ -1001,15 +1022,26 @@ main > section:nth-child(2) {
 }
 
 .cardLoginFooter {
-  display: inline;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0 1rem 0.5rem;
   background: transparent;
   border: 0;
   box-shadow: none;
+  text-align: center;
 }
 
 .cardLoginFooter p {
   display: block;
+  margin: 0;
+}
+
+.cardLoginFooter a {
+  display: inline-block;
 }
 
 .cardLoginFooter a {

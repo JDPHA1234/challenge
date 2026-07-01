@@ -1,8 +1,16 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { useAuthStore } from "../store/authStore.js"
 
 export function Header() {
-    const { isLoggedIn, avatar_url } = useAuthStore()
+    const { isLoggedIn, avatar_url, logOut, loading } = useAuthStore()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        const result = await logOut()
+        if (result.success) {
+            navigate('/')
+        }
+    }
     
     // Ahora la imagen es un enlace con una clase especial
     const loginButton = isLoggedIn ? (
@@ -14,6 +22,11 @@ export function Header() {
     );
     
     const uploadcv = isLoggedIn ? <NavLink to="/profile#seccion-cv">Subir CV</NavLink> : null
+    const logoutButton = isLoggedIn ? (
+        <button type="button" className="header-action header-logout" onClick={handleLogout} disabled={loading}>
+            {loading ? 'Cerrando...' : 'Cerrar sesión'}
+        </button>
+    ) : null
     
     return (
         <header>
@@ -32,6 +45,7 @@ export function Header() {
             </nav>
             <div>
                 {uploadcv}
+                {logoutButton}
                 {loginButton}
             </div>
         </header>

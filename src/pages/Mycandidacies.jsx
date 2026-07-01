@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../supabase-client.js'
 import { useAuthStore } from '../store/authStore.js'
 import { NavLink } from 'react-router'
+import { Spinner } from '../components/Spinner.jsx'
 const summaryCards = [
 	{ label: 'Total', value: '12', tone: '' },
 	{ label: 'En revisión', value: '4', tone: 'warning' },
@@ -72,9 +73,12 @@ export default function Mycandidacies() {
 	const [loading, setLoading] = useState(true)
 	const [applications, setApplications] = useState([])
 	const [error, setError] = useState(null)
+	const { user } = useAuthStore()
 	useEffect(() => {
 		async function obtenerMisSolicitudes(userId) {
 			try {
+				setLoading(true)
+				setError(null)
 				const { data, error } = await supabase
 					.from('Solicitud')
 					.select(`
@@ -95,7 +99,7 @@ export default function Mycandidacies() {
 				if (error) {
 					throw error;
 				}
-				setApplications(data)
+				setApplications(data || [])
 
 			} catch (error) {
 				setError(error.message)
@@ -104,19 +108,20 @@ export default function Mycandidacies() {
 				setLoading(false) // Terminamos la carga
 			}
 		}
-		obtenerMisSolicitudes(useAuthStore.getState().user.id)
-	}, [])
+		if (!user?.id) {
+			setError('Debes iniciar sesión para ver tus candidaturas.')
+			setLoading(false)
+			return
+		}
+		obtenerMisSolicitudes(user.id)
+	}, [user?.id])
 	if (loading) {
-		return (
-			<div>
-				<p>Cargando...</p>
-			</div>
-		)
+		return <Spinner />
 	}
 	if (error) {
 		return (
-			<div>
-				<p>No se pudo cargar las solicitudes.</p>
+			<div className="loginError">
+				<p>{error}</p>
 			</div>
 		)
 	}

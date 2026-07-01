@@ -1,20 +1,20 @@
-import { createContext ,useState,useContext} from "react"
+import { createContext, useContext, useEffect } from "react"
 import { useAuthStore } from "../store/authStore";
-import { useEffect } from "react";
+import { Spinner } from "../components/Spinner.jsx";
 export const AuthContext = createContext()
 
 export function AuthProvider({children}) {
-    const { loading , getAuth } = useAuthStore();
+    const { loading, initializeAuth, user } = useAuthStore();
 
     useEffect(() => {
-        getAuth();
-    }, []);
+        initializeAuth();
+    }, [initializeAuth]);
     // Si aún está cargando, mostramos el spinner globalmente
     if (loading) return <Spinner />;
     return (
-        <AuthContext value={user}>
+        <AuthContext.Provider value={user}>
             {children}
-        </AuthContext>
+        </AuthContext.Provider>
     )
 }
 export function useAuth(){

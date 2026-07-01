@@ -7,15 +7,20 @@ export function JobCard({ jobs }) {
     // 1. Obtenemos 'isLoggedIn' y el 'user' completo desde tu store
     const { isLoggedIn, user } = useAuthStore() 
     const [loading, setLoading] = useState(true) // Estado para manejar la carga de la solicitud
+    const [error, setError] = useState(null)
     const [isApplied, setApplied] = useState(false)
-    const [tieneCV, setTieneCV] = useState(false) // Estado para verificar si el usuario tiene CV
     // 2. VERIFICAR AL CARGAR: Revisamos si ya existe la solicitud en la base de datos
     useEffect(() => {
         async function checkApplication() {
             // Si no está logueado o no hay usuario, no hacemos la consulta
-            if (!isLoggedIn || !user) return; 
+            if (!isLoggedIn || !user) {
+                setLoading(false)
+                return
+            }
 
             try {
+                setLoading(true)
+                setError(null)
                 const { data, error } = await supabase
                     .from('Solicitud')
                     .select('id') // Solo pedimos el ID para que sea más rápido
@@ -30,18 +35,20 @@ export function JobCard({ jobs }) {
                     setApplied(true);
                 }
             } catch (error) {
+                setError('No se pudo verificar tu candidatura. Intenta de nuevo.')
                 console.error('Error verificando el estado de la solicitud:', error.message);
             }finally {
                 setLoading(false); // Terminamos la carga
             }
         }   
         checkApplication();
-    }, [jobs.id, user, isLoggedIn]); // Se vuelve a ejecutar si el idTrabajo o el usuario cambian
+    }, [jobs.id, user?.id, isLoggedIn]); // Se vuelve a ejecutar si el idTrabajo o el usuario cambian
 
     // 3. ACCIÓN AL HACER CLIC: Insertar la nueva solicitud
     const handleClick = async () => {
         if (!user) return; // Validación de seguridad extra
         setLoading(true); // Iniciamos la carga mientras hacemos la solicitud
+        setError(null)
         let solicitud = {
             idTrabajo: jobs.id, 
             idUsuario: user.id, // Sacamos el ID directamente del user del store
@@ -61,15 +68,15 @@ export function JobCard({ jobs }) {
             }
             solicitud.cvSolicitud_url = data?.cv_url || null;
         }catch (error) {
+            setError('No se pudo validar tu CV. Intenta más tarde.')
             console.error('Error al enviar la solicitud:', error.message);
         }
 
         if (solicitud.cvSolicitud_url) {
-            setTieneCV(true);
         }else {
-            return (
-                alert("No tienes un CV cargado. Por favor, sube tu CV en tu perfil antes de aplicar.")
-            )
+            setError('No tienes un CV cargado. Sube tu CV en tu perfil antes de aplicar.')
+            setLoading(false)
+            return
         }
 
         try {
@@ -87,6 +94,7 @@ export function JobCard({ jobs }) {
             setApplied(true); // Cambiamos el estado para que el botón se actualice
 
         }catch (error) {
+            setError('No se pudo enviar tu solicitud. Intenta nuevamente.')
             console.error('Error al enviar la solicitud:', error.message);
         }finally {
             setLoading(false); // Terminamos la carga  
@@ -112,6 +120,7 @@ export function JobCard({ jobs }) {
             </div>
             <small>{jobs?.Empresa?.nombre} | {jobs?.modalidad} ({jobs?.ubicacion})</small>
             <p className='descriptionSearch'>{jobs?.descripcion}</p>
+            {error ? <small>{error}</small> : null}
         </article>
     )
 }

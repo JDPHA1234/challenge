@@ -6,8 +6,8 @@ import { Spinner } from '../components/Spinner.jsx'
 import { useFilters } from '../hooks/useFilters.jsx'
 export default function  Search() {
     
-    const {jobs, handleFilters, handleTextFilter, handleReset, currentPage, setCurrentPage, totalPages,loading, textSearch, filters} = useFilters()
-    const condition = loading ? <Spinner/> : <JobListing joblist={jobs} /> 
+    const {jobs, handleFilters, handleTextFilter, handleReset, currentPage, setCurrentPage, totalPages,loading, error, textSearch, filters} = useFilters()
+    const condition = loading ? <Spinner/> : error ? <p className="loginError">{error}</p> : <JobListing joblist={jobs} /> 
     useEffect( () => {
         document.title = `Resultados : Pagina ${currentPage}`
     }, [currentPage])
@@ -16,7 +16,7 @@ export default function  Search() {
         <section className="search-result">
             <h3>Resultados de busqueda</h3>
             {condition}
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            {!error && !loading ? <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} /> : null}
         </section>
     </main>)
 }

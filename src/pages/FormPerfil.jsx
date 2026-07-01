@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom' // Asegúrate de que sea react-router-dom
+import { useLocation } from 'react-router-dom'
 import { AsideProfile } from '../components/AsideProfile'
 import { useAuthStore } from '../store/authStore.js'
 import { supabase } from '../supabase-client.js'
@@ -8,9 +8,12 @@ export default function FormPerfil() {
     const { user } = useAuthStore(); // Obtenemos el usuario logueado
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState(null);
     const [profileImage, setProfileImage] = useState(null); // Estado para la imagen de perfil
     const [cv, setCv] = useState(null); // Estado para el CV
     const idName = useId();
+    const location = useLocation();
     // Estado para guardar los datos de la base de datos
     const [perfil, setPerfil] = useState({
         nombre: '',
@@ -27,9 +30,14 @@ export default function FormPerfil() {
     // 1. CARGAR DATOS AL INICIAR
     useEffect(() => {
         async function fetchProfile() {
-            if (!user) return;
+            if (!user) {
+                setError('Debes iniciar sesión para ver tu perfil.')
+                setIsLoading(false)
+                return;
+            }
 
             try {
+                setError(null)
                 const { data, error } = await supabase
                     .from('usuario') // Cambia esto si tu tabla tiene otro nombre
                     .select('*')
@@ -53,6 +61,7 @@ export default function FormPerfil() {
                     });
                 }
             } catch (error) {
+                setError(error.message)
                 console.error("Error al cargar el perfil:", error.message);
             } finally {
                 setIsLoading(false);
@@ -83,10 +92,12 @@ export default function FormPerfil() {
             .upload(filePath, file)
 
         if (error) {
-            console.error('Error subiendo el PDF:', error.message)
-            return null
+            throw new Error(`Error subiendo el PDF: ${error.message}`)
         }
         const { data } = await supabase.storage.from('PDFs').getPublicUrl(filePath)
+        if (!data?.publicUrl) {
+            throw new Error('No se pudo obtener la URL pública del CV.')
+        }
         return data.publicUrl
     }
     const uploadProfileImage = async (file) => {
@@ -102,54 +113,68 @@ export default function FormPerfil() {
             .upload(filePath, file)
 
         if (error) {
-            console.error('Error subiendo la imagen:', error.message)
-            return null
+            throw new Error(`Error subiendo la imagen: ${error.message}`)
         }
         const { data } = await supabase.storage.from('profileimages').getPublicUrl(filePath)
+        if (!data?.publicUrl) {
+            throw new Error('No se pudo obtener la URL pública de la imagen.')
+        }
         return data.publicUrl
     }
     // 2. ENVIAR LOS DATOS ACTUALIZADOS
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (!user) {
+            setError('Debes iniciar sesión para guardar cambios.')
+            return
+        }
+
+        setIsSaving(true)
+        setError(null)
 
 
         const formData = new FormData(event.currentTarget);
 
-        let imageurl = null
-        if (profileImage) {
-            imageurl = await uploadProfileImage(profileImage);
-        }
-        let cvurl = null
-        if (cv) {
-            cvurl = await uploadcv(cv);
-        }
-
-
-        const updates = {
-            nombre: formData.get('nombre'),
-            email: formData.get('email'),
-            ubicacion: formData.get('ubicacion'),
-            sobre_mi: formData.get('sobre_mi'),
-            cargo: formData.get('cargo'),
-            empresa: formData.get('empresa'),
-            experiencia: formData.get('experiencia'),
-            avatar_url: imageurl || perfil.avatar_url, // Si no hay nueva imagen, mantenemos la existente
-            cv_url: cvurl || perfil.cv_url // Si no hay nuevo PDF, mantenemos el existente
-        };
-        console.log("Enviando datos actualizados:", updates);
         try {
+            let imageurl = perfil.avatar_url
+            if (profileImage) {
+                imageurl = await uploadProfileImage(profileImage);
+            }
+            let cvurl = perfil.cv_url
+            if (cv) {
+                cvurl = await uploadcv(cv);
+            }
+
+
+            const updates = {
+                nombre: formData.get('nombre'),
+                email: formData.get('email'),
+                ubicacion: formData.get('ubicacion'),
+                sobre_mi: formData.get('sobre_mi'),
+                cargo: formData.get('cargo'),
+                empresa: formData.get('empresa'),
+                experiencia: formData.get('experiencia'),
+                avatar_url: imageurl,
+                cv_url: cvurl
+            };
+            console.log("Enviando datos actualizados:", updates);
             const { error, data } = await supabase
                 .from('usuario')
                 .update(updates)
                 .eq('id', user.id)
+                .select('*')
+                .single()
             if (error) throw error;
             alert('Perfil actualizado con éxito');
             setIsEditing(false); // Volvemos al modo de solo lectura
-            setPerfil(updates); // Actualizamos el estado local con los nuevos datos
+            setPerfil(data || updates); // Actualizamos el estado local con los nuevos datos
 
         } catch (error) {
+            setError(error.message)
             console.error("Error al actualizar:", error.message);
             alert('Hubo un error al guardar los cambios');
+        } finally {
+            setIsSaving(false)
         }
     };
     useEffect(() => {
@@ -166,10 +191,21 @@ export default function FormPerfil() {
         }
     }, [isLoading, location.hash]);
     // Lógica dinámica para la UI
-    const textButton = isEditing ? 'Guardar Cambios' : 'Editar';
-    const typeButton = isEditing ? 'submit' : 'button';
-
     if (isLoading) return <div className="appConteiner"><p>Cargando perfil...</p></div>;
+    if (error) {
+        return (
+            <div className="appConteiner">
+                <AsideProfile />
+                <main className="mainForm">
+                    <div className="formTitle">
+                        <h1>Mi perfil</h1>
+                        <p>Actualiza tu información personal y profesional</p>
+                        <p className="loginError">{error}</p>
+                    </div>
+                </main>
+            </div>
+        )
+    }
     const avatarSrc = profileImage
         ? URL.createObjectURL(profileImage)
         : (perfil.avatar_url || 'https://via.placeholder.com/150?text=Avatar');
@@ -180,6 +216,7 @@ export default function FormPerfil() {
                 <div className="formTitle">
                     <h1>Mi perfil</h1>
                     <p>Actualiza tu información personal y profesional</p>
+                    {error ? <p className="loginError">{error}</p> : null}
                 </div>
 
                 <form className="formUser" onSubmit={handleSubmit}>
@@ -269,6 +306,7 @@ export default function FormPerfil() {
                             /* Modo Lectura: Botón estrictamente configurado como "button" */
                             <button
                                 type="button"
+                                disabled={isSaving}
                                 onClick={(e) => {
                                     e.preventDefault(); // Detiene cualquier intento de envío accidental
                                     setIsEditing(true);
@@ -279,13 +317,14 @@ export default function FormPerfil() {
                         ) : (
                             /* Modo Edición: Botones para Guardar (submit) y Cancelar */
                             <>
-                                <button type="submit">
-                                    Guardar Cambios
+                                <button type="submit" disabled={isSaving}>
+                                    {isSaving ? 'Guardando...' : 'Guardar Cambios'}
                                 </button>
 
                                 <button
                                     type="button"
                                     onClick={() => setIsEditing(false)}
+                                    disabled={isSaving}
                                     style={{ marginLeft: '10px' }}
                                 >
                                     Cancelar

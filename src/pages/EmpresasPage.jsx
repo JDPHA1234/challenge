@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase-client.js';
+import { Spinner } from '../components/Spinner.jsx';
 
 export default function EmpresasPage() {
     const [empresas, setEmpresas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         async function fetchEmpresas() {
             try {
+                setIsLoading(true);
+                setError(null);
                 // Hacemos la llamada a tu tabla Empresa
                 const { data, error } = await supabase
                     .from('Empresa')
@@ -19,6 +23,8 @@ export default function EmpresasPage() {
                 
                 setEmpresas(data || []);
             } catch (error) {
+                setEmpresas([]);
+                setError(error.message);
                 console.error("Error al cargar las empresas:", error.message);
             } finally {
                 setIsLoading(false);
@@ -29,7 +35,11 @@ export default function EmpresasPage() {
     }, []);
 
     if (isLoading) {
-        return <div className="empresas-loading">Cargando empresas...</div>;
+        return <Spinner />;
+    }
+
+    if (error) {
+        return <div className="empresas-loading">{error}</div>;
     }
 
     return (

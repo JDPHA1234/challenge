@@ -2,6 +2,7 @@ import { Link } from "../components/Link.jsx"
 import { supabase } from "../supabase-client.js"
 import { useState, useEffect, use } from "react"
 import { useParams } from 'react-router-dom'
+import { Spinner } from '../components/Spinner.jsx'
 const stats = [
 	{ value: "98%", label: "Retención" },
 	{ value: "120+", label: "Proyectos" },
@@ -67,6 +68,8 @@ export default function Empresa() {
 	useEffect(() => {
 		async function fetchEmpresa() {
 			try {
+				setLoading(true)
+				SetError(null)
 				const [empresaReq, trabajoReq] = await Promise.all([
 					supabase.from('Empresa').select('*').eq('id', id).single(),
 					supabase.from('Trabajo').select('*').eq('idEmpresa', id).limit(3),
@@ -77,7 +80,7 @@ export default function Empresa() {
 
 				// Guardamos los estados
 				setEmpresa(empresaReq.data);
-				setTrabajo(trabajoReq.data);
+				setTrabajo(trabajoReq.data || []);
 			} catch (error) {
 				SetError(error.message)
 				console.error('error fetching de datos', error)
@@ -89,16 +92,12 @@ export default function Empresa() {
 		fetchEmpresa()
 	}, [id])
 	if (loading) {
-		return (
-			<div>
-				<p>Cargando...</p>
-			</div>
-		)
+		return <Spinner />
 	}
 	if (error) {
 		return (
-			<div>
-				<p>No se pudo cargar la empresa.</p>
+			<div className="loginError">
+				<p>{error}</p>
 			</div>
 		)
 	}

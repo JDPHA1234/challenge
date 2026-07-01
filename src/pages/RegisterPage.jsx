@@ -1,27 +1,25 @@
 import { NavLink } from "react-router-dom"
 import { useRouter } from "../hooks/useRouter"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAuthStore } from "../store/authStore"
-import { supabase } from '../supabase-client.js'
 export default function RegisterPage() {
             const {navigateTo} = useRouter()
+            const { signUp, error, loading } = useAuthStore()
             const [email, setEmail] = useState('')
             const [password, setPassword] = useState('')
-            const [error, setError] = useState(null)
+            useEffect(() => {
+                useAuthStore.setState({ error: null })
+            }, [])
             const handlechangeemail= (event) => {
                 setEmail(event.target.value)
-            }
-            const handlechangeusername= (event) => {
-                setUsername(event.target.value)
             }
             const handlechangepassword= (event) => {
                 setPassword(event.target.value)
             }
             const handleSubmit = async (event) => {
                 event.preventDefault()
-                const { data, error } = await supabase.auth.signUp({ email,password })
-                setError(error ? error.message : null)
-                if (!error) {
+                const result = await signUp(email, password)
+                if (result.success) {
                     navigateTo('/login')
                 }
             }
@@ -48,7 +46,7 @@ export default function RegisterPage() {
                     <label htmlFor="rememberMe"><input type="checkbox" id="rememberMe"/> Recordarme</label>
                 </div>
                 <div className="buttonLogin">
-                <button type="submit">Registrarme</button>
+                <button type="submit" disabled={loading}>{loading ? 'Registrando...' : 'Registrarme'}</button>
                 </div>
             </form>
             <footer className='cardLoginFooter'>

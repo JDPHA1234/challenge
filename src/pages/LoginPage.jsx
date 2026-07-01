@@ -1,12 +1,15 @@
 import { useRouter } from "../hooks/useRouter"
 import { NavLink } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAuthStore } from "../store/authStore.js"
 export default function LoginPage() {
-        const { login, error } = useAuthStore()
+    const { login, error, loading } = useAuthStore()
         const {navigateTo} = useRouter();
         const [email, setEmail] = useState('')
         const [password, setPassword] = useState('')
+        useEffect(() => {
+            useAuthStore.setState({ error: null })
+        }, [])
         const handlechangeemail= (event) => {
             setEmail(event.target.value)
         }
@@ -44,7 +47,7 @@ export default function LoginPage() {
                         <input type="checkbox" id="rememberMe"/> Recordarme</label>
                 </div>
                 <div className="buttonLogin">
-                <button type="submit">Iniciar sesión</button>
+                <button type="submit" disabled={loading}>{loading ? 'Ingresando...' : 'Iniciar sesión'}</button>
                 </div>
             </form>
             <footer className="cardLoginFooter" >

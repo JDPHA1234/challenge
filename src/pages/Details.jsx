@@ -74,7 +74,6 @@ export default function Details(){
                 <h1>{job.titulo}</h1>
                 <small>{job.Empresa.nombre} | {job.ubicacion}</small>
                 </div>
-                <button>Aplicar ahora</button>
     
             </header>
             <JobDetails title='Descripcion del puesto' content={job.content?.description} />

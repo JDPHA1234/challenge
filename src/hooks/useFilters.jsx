@@ -33,7 +33,7 @@ export function useFilters() {
         setTextSearch('')
         setCurrentPage(1);
     }
-    const itemsforPage = 4;
+    const itemsforPage = 6;
     const [total, setTotal] = useState(0)
     const [jobs, setJobs] = useState([])
     const [loading, setLoading] = useState(true)

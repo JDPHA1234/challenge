@@ -95,7 +95,6 @@ export default function Mycandidacies() {
 				if (error) {
 					throw error;
 				}
-				console.log('Solicitudes obtenidas:', data);
 				setApplications(data)
 
 			} catch (error) {

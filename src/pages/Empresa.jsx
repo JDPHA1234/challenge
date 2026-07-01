@@ -76,7 +76,6 @@ export default function Empresa() {
 				if (trabajoReq.error) throw trabajoReq.error;
 
 				// Guardamos los estados
-				console.log(empresaReq.data, trabajoReq.data);
 				setEmpresa(empresaReq.data);
 				setTrabajo(trabajoReq.data);
 			} catch (error) {

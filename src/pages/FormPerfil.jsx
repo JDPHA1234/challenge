@@ -37,7 +37,6 @@ export default function FormPerfil() {
                     .single();
 
                 if (error) throw error;
-                console.log("Datos del perfil obtenidos:", data);
 
                 if (data) {
                     // Actualizamos el estado con los datos que vinieron de la DB

@@ -1,11 +1,12 @@
 import { useRouter } from "../hooks/useRouter"
-import {useId} from   'react'
+import { useId } from 'react'
 export default function Home() {
     const inputId= useId()
     const {navigateTo} = useRouter();
     const handleSubmit = (event) => {
+        event.preventDefault();
         const formData = new FormData(event.target);
-        const searchText = formData.get(inputId)
+        const searchText = formData.get('text')
         const url = `/search?text=${encodeURIComponent(searchText)}`
         navigateTo(url)
     }
@@ -27,7 +28,7 @@ export default function Home() {
                     <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                     <path d="M21 21l-6 -6" />
                 </svg>
-                <input name={inputId} type="text"
+                <input id={inputId} name="text" type="text"
                     placeholder="Buscar empleos por titulo,habilidad o empresa"
                     aria-label="Buscar empleos"/>
                 <button type="submit">Buscar</button>

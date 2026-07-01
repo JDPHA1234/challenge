@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { supabase } from '../supabase-client.js'
 
+let authSubscription = null
+
 async function fetchAvatarUrl(userId) {
   try {
     const { data, error } = await supabase
@@ -106,6 +108,11 @@ export const useAuthStore = create((set) => ({
       const { error } = await supabase.auth.signOut()
       if (error) throw error
 
+      if (authSubscription) {
+        authSubscription.unsubscribe()
+        authSubscription = null
+      }
+
       set({ user: null, isLoggedIn: false, avatar_url: null, loading: false, error: null })
       return { success: true, error: null }
     } catch (error) {
@@ -127,9 +134,17 @@ export const useAuthStore = create((set) => ({
 
       await loadUserSession(set, session)
 
-      supabase.auth.onAuthStateChange(async (_event, nextSession) => {
+      if (authSubscription) {
+        authSubscription.unsubscribe()
+      }
+
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(async (_event, nextSession) => {
         await loadUserSession(set, nextSession)
       })
+
+      authSubscription = subscription
     } catch (error) {
       set({
         user: null,
@@ -139,12 +154,5 @@ export const useAuthStore = create((set) => ({
         error: error.message,
       })
     }
-  },
-
-  getAuth: async () => {
-    await useAuthStore.getState().initializeAuth()
-  },
-
-  setUser: (user) => set({ user }),
-  setLoading: (loading) => set({ loading }),
+  }
 }))

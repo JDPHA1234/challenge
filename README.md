@@ -47,11 +47,14 @@ El esquema se compone de las tablas esenciales para mitigar la complejidad del d
 <img width="988" height="775" alt="imagen" src="https://github.com/user-attachments/assets/350d2090-aea6-428a-95a5-a6cc1e29adf4" />
 
 
+
+
 #### 🔐 Seguridad y Políticas (RLS - Row Level Security)
 Se habilitó RLS en Supabase para asegurar que un usuario postulante solo pueda visualizar y gestionar sus propias postulaciones, protegiendo la integridad de los datos.
 
 <img width="1226" height="633" alt="imagen" src="https://github.com/user-attachments/assets/e98e3129-4a53-4b86-a48f-5921cdcb789b" />
-
+### Restricion de solicitudes(No duplicadas)
+<img width="539" height="42" alt="imagen" src="https://github.com/user-attachments/assets/75c81471-c9d8-4771-be8d-de9a2e4b2da9" />
 
 ### 📐 Arquitectura de Carpetas
 Se optó por una arquitectura modular basada en características (*feature-driven/clean structure*), separando la lógica de negocio de los componentes visuales:

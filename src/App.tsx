@@ -1,18 +1,18 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { Header } from './components/Header.jsx'
-import { Footer } from './components/Footer.jsx'
+import { Header } from './components/Header.js'
+import { Footer } from './components/Footer.js'
 import { lazy, Suspense } from 'react'
-import { ProtectedRoute } from './components/ProtectedRoute.jsx'
-const Home = lazy(() =>  import('./pages/Home.jsx'))
-const Search = lazy(() =>  import('./pages/Search.jsx'))
-const Details = lazy(() => import('./pages/Details.jsx'))
-const LoginPage = lazy(() => import('./pages/LoginPage.jsx'))
-const RegisterPage = lazy(() => import('./pages/RegisterPage.jsx'))
-const FormPerfil = lazy(() => import('./pages/FormPerfil.jsx'))
-const Empresa = lazy(() => import('./pages/Empresa.jsx'))
-const Mycandidacies = lazy(() => import('./pages/Mycandidacies.jsx'))
-const Page404 = lazy(() => import('./pages/404.jsx'))
-const EmpresasPage = lazy(() => import('./pages/EmpresasPage.jsx'))
+import { ProtectedRoute } from './components/ProtectedRoute.js'
+const Home = lazy(() =>  import('./pages/Home.js'))
+const Search = lazy(() =>  import('./pages/Search.js'))
+const Details = lazy(() => import('./pages/Details.js'))
+const LoginPage = lazy(() => import('./pages/LoginPage.js'))
+const RegisterPage = lazy(() => import('./pages/RegisterPage.js'))
+const FormPerfil = lazy(() => import('./pages/FormPerfil.js'))
+const Empresa = lazy(() => import('./pages/Empresa.js'))
+const Mycandidacies = lazy(() => import('./pages/Mycandidacies.js'))
+const Page404 = lazy(() => import('./pages/404.js'))
+const EmpresasPage = lazy(() => import('./pages/EmpresasPage.js'))
 
 function App() {
   const location = useLocation()

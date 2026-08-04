@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase-client.js';
-import { Spinner } from '../components/Spinner.jsx';
-
+import { Spinner } from '../components/Spinner.js';
+import type { Empresa } from '../components/types.js';
 export default function EmpresasPage() {
-    const [empresas, setEmpresas] = useState([]);
+    const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchEmpresas() {
@@ -24,8 +24,8 @@ export default function EmpresasPage() {
                 setEmpresas(data || []);
             } catch (error) {
                 setEmpresas([]);
-                setError(error.message);
-                console.error("Error al cargar las empresas:", error.message);
+                setError((error as Error).message);
+                console.error("Error al cargar las empresas:",error);
             } finally {
                 setIsLoading(false);
             }

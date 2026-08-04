@@ -3,62 +3,9 @@ import { supabase } from "../supabase-client.js"
 import { useState, useEffect, use } from "react"
 import { useParams } from 'react-router-dom'
 import { Spinner } from '../components/Spinner.jsx'
-import { SectionTitleProps , job ,Empresa} from '../components/types.ts'
-const stats = [
-	{ value: "98%", label: "Retención" },
-	{ value: "120+", label: "Proyectos" },
-	{ value: "15", label: "Países" },
-	{ value: "4.8/5", label: "Glassdoor" },
-]
+import { job ,Empresa} from '../components/types.ts'
+import { SectionTitle } from '../components/SectionTitle.tsx'
 
-const benefits = [
-	{
-		"title": "Salario en USD",
-		"description": "Compensación 100% en dólares con bonos cuatrimestrales por rendimiento del fondo.",
-	},
-	{
-		"title": "Salario Competitivo",
-		"description": "Revisiones semestrales basadas en impacto, desempeño y resultados del equipo.",
-	},
-	{
-		"title": "Presupuesto para Formación",
-		"description": "Hasta 2000 USD anuales para cursos, libros, certificaciones y conferencias.",
-	},
-	{
-		"title": "Bienestar & Salud",
-		"description": "Seguro médico premium de primera línea y suscripción gratuita a red de gimnasios.",
-	},
-]
-
-const positions = [
-	{
-		title: "Senior Frontend Developer",
-		meta: "Remoto (Europa)",
-		salary: "65k - 85k €",
-		tags: ["React", "TypeScript"],
-	},
-	{
-		title: "Backend Engineer (Node.js)",
-		meta: "Híbrido (Madrid)",
-		salary: "50k - 70k €",
-		tags: ["Node.js", "AWS"],
-	},
-	{
-		title: "Product Designer (UX/UI)",
-		meta: "Remoto",
-		salary: "45k - 60k €",
-		tags: ["Figma", "Systems"],
-	},
-]
-
-function SectionTitle({ title, subtitle } : SectionTitleProps) {
-	return (
-		<header className="company-section-title">
-			<h2>{title}</h2>
-			{subtitle ? <p>{subtitle}</p> : null}
-		</header>
-	)
-}
 
 export default function Empresa() {
 	const [loading, setLoading] = useState(true)

@@ -1,9 +1,8 @@
 import { create } from 'zustand'
 import { supabase } from '../supabase-client.js'
+let authSubscription: { unsubscribe: () => void } | null = null
 
-let authSubscription = null
-
-async function fetchAvatarUrl(userId) {
+async function fetchAvatarUrl(userId: string) {
   try {
     const { data, error } = await supabase
       .from('usuario')
@@ -15,12 +14,13 @@ async function fetchAvatarUrl(userId) {
 
     return data?.avatar_url ?? null
   } catch (error) {
-    console.error('Error al cargar el avatar del usuario:', error.message)
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('Error al cargar el avatar del usuario:', message)
     return null
   }
 }
 
-async function loadUserSession(set, session) {
+async function loadUserSession(set: (state: any) => void, session: any) {
   const avatarUrl = session?.user ? await fetchAvatarUrl(session.user.id) : null
 
   set({
@@ -39,7 +39,7 @@ export const useAuthStore = create((set) => ({
   avatar_url: null,
   loading: true,
 
-  login: async (email, password) => {
+  login: async (email : string, password : string) => {
     set({ loading: true, error: null })
 
     try {
@@ -63,17 +63,17 @@ export const useAuthStore = create((set) => ({
       return { success: true, error: null }
     } catch (error) {
       set({
-        error: error.message,
+        error: (error as Error).message,
         user: null,
         isLoggedIn: false,
         avatar_url: null,
         loading: false,
       })
-      return { success: false, error: error.message }
+      return { success: false, error:  (error as Error).message }
     }
   },
 
-  signUp: async (email, password, extraData = {}) => {
+  signUp: async (email: string, password : string, extraData = {}) => {
     set({ loading: true, error: null })
 
     try {
@@ -96,8 +96,8 @@ export const useAuthStore = create((set) => ({
 
       return { success: true, error: null, user: data.user ?? null }
     } catch (error) {
-      set({ error: error.message, loading: false })
-      return { success: false, error: error.message }
+      set({ error: (error as Error).message, loading: false })
+      return { success: false, error: (error as Error).message }
     }
   },
 
@@ -116,8 +116,8 @@ export const useAuthStore = create((set) => ({
       set({ user: null, isLoggedIn: false, avatar_url: null, loading: false, error: null })
       return { success: true, error: null }
     } catch (error) {
-      set({ loading: false, error: error.message })
-      return { success: false, error: error.message }
+      set({ loading: false, error: (error as Error).message })
+      return { success: false, error: (error as Error).message }
     }
   },
 
@@ -151,7 +151,7 @@ export const useAuthStore = create((set) => ({
         isLoggedIn: false,
         avatar_url: null,
         loading: false,
-        error: error.message,
+        error: (error as Error).message,
       })
     }
   }

@@ -1,4 +1,4 @@
-import { useRouter } from "../hooks/useRouter"
+import { useRouter } from "../hooks/useRouter.js"
 import { NavLink } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useAuthStore } from "../store/authStore.js"
@@ -10,13 +10,13 @@ export default function LoginPage() {
         useEffect(() => {
             useAuthStore.setState({ error: null })
         }, [])
-        const handlechangeemail= (event) => {
+        const handlechangeemail= (event : React.ChangeEvent<HTMLInputElement>) => {
             setEmail(event.target.value)
         }
-        const handlechangepassword= (event) => {
+        const handlechangepassword= (event : React.ChangeEvent<HTMLInputElement>) => {
             setPassword(event.target.value)
         }
-        const handleSubmit = async (event) => {
+        const handleSubmit = async (event : React.SubmitEvent<HTMLFormElement>) => {
             event.preventDefault()
             const result = await login(email, password)
             if (result.success) {

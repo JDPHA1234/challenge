@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { AsideProfile } from '../components/AsideProfile'
+import { AsideProfile } from '../components/AsideProfile.js'
 import { useAuthStore } from '../store/authStore.js'
 import { supabase } from '../supabase-client.js'
 import { useId } from 'react'
@@ -9,12 +9,11 @@ export default function FormPerfil() {
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
-    const [error, setError] = useState(null);
-    const [profileImage, setProfileImage] = useState(null); // Estado para la imagen de perfil
-    const [cv, setCv] = useState(null); // Estado para el CV
+    const [error, setError] = useState<string | null>(null);
+    const [profileImage, setProfileImage] = useState<File | null>(null);
+    const [cv, setCv] = useState<File | null>(null); 
     const idName = useId();
     const location = useLocation();
-    // Estado para guardar los datos de la base de datos
     const [perfil, setPerfil] = useState({
         nombre: '',
         email: '',
@@ -39,7 +38,7 @@ export default function FormPerfil() {
             try {
                 setError(null)
                 const { data, error } = await supabase
-                    .from('usuario') // Cambia esto si tu tabla tiene otro nombre
+                    .from('usuario') 
                     .select('*')
                     .eq('id', user.id)
                     .single();
@@ -47,7 +46,6 @@ export default function FormPerfil() {
                 if (error) throw error;
 
                 if (data) {
-                    // Actualizamos el estado con los datos que vinieron de la DB
                     setPerfil({
                         nombre: data.nombre || '',
                         email: data.email || '',
@@ -57,35 +55,33 @@ export default function FormPerfil() {
                         empresa: data.empresa || '',
                         experiencia: data.experiencia || '',
                         avatar_url: data.avatar_url || '',
-                        cv_url: data.cv_url || '' // Aseguramos que haya un valor por defecto
+                        cv_url: data.cv_url || ''
                     });
                 }
             } catch (error) {
-                setError(error.message)
-                console.error("Error al cargar el perfil:", error.message);
+                setError((error as Error).message)
+                console.error("Error al cargar el perfil:",Error);
             } finally {
                 setIsLoading(false);
             }
         }
         fetchProfile();
     }, []);
-    const handleFileChangeImage = (event) => {
+    const handleFileChangeImage = (event : React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             setProfileImage(event.target.files[0])
         }
     }
-    const handleFileChangePDF = (event) => {
+    const handleFileChangePDF = (event : React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             setCv(event.target.files[0])
         }
     }
-    const uploadcv = async (file) => {
+    const uploadcv = async (file : File) => {
         const fileExt = file.name.split('.').pop();
 
-        // 2. Generamos un nombre totalmente limpio (ej: "1782697189851.pdf")
         const fileName = `${Date.now()}.${fileExt}`;
 
-        // Opcional pero recomendado: guardarlo en una carpeta con el ID del usuario
         const filePath = `${user.id}/${fileName}`;
         const { error } = await supabase.storage
             .from('PDFs')
@@ -100,13 +96,10 @@ export default function FormPerfil() {
         }
         return data.publicUrl
     }
-    const uploadProfileImage = async (file) => {
+    const uploadProfileImage = async (file : File) => {
         const fileExt = file.name.split('.').pop();
-
-        // 2. Generamos un nombre totalmente limpio (ej: "1782697189851.pdf")
         const fileName = `${Date.now()}.${fileExt}`;
 
-        // Opcional pero recomendado: guardarlo en una carpeta con el ID del usuario
         const filePath = `${user.id}/${fileName}`;
         const { error } = await supabase.storage
             .from('profileimages')
@@ -122,7 +115,7 @@ export default function FormPerfil() {
         return data.publicUrl
     }
     // 2. ENVIAR LOS DATOS ACTUALIZADOS
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event : React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!user) {
             setError('Debes iniciar sesión para guardar cambios.')
@@ -166,24 +159,23 @@ export default function FormPerfil() {
                 .single()
             if (error) throw error;
             alert('Perfil actualizado con éxito');
-            setIsEditing(false); // Volvemos al modo de solo lectura
-            setPerfil(data || updates); // Actualizamos el estado local con los nuevos datos
+            setIsEditing(false); 
+            setPerfil(data || updates); 
 
         } catch (error) {
-            setError(error.message)
-            console.error("Error al actualizar:", error.message);
+            setError((error as Error).message)
+            console.error("Error al actualizar:", error);
             alert('Hubo un error al guardar los cambios');
         } finally {
             setIsSaving(false)
         }
     };
     useEffect(() => {
-        // Solo intentamos hacer scroll si ya terminó de cargar la base de datos
+
         if (!isLoading && location.hash === '#seccion-cv') {
             const elemento = document.getElementById('seccion-cv');
 
             if (elemento) {
-                // Un pequeño retraso asegura que React ya terminó de pintar el HTML
                 setTimeout(() => {
                     elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 100);

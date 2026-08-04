@@ -1,13 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { useAuthStore } from './store/authStore.js'
+import { useAuthStore } from './store/authStore'
 import './index.css'
-import App from './App.jsx'
+import App from './App'
+ 
 
-useAuthStore.getState().initializeAuth();
+(useAuthStore as any).getState().initializeAuth();
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <BrowserRouter>
         <App />

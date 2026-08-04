@@ -15,7 +15,7 @@ export function Header() {
     // Ahora la imagen es un enlace con una clase especial
     const loginButton = isLoggedIn ? (
         <NavLink to="/profile" className="avatar-link">
-            <img src={avatar_url} alt="Foto del usuario" />
+            <img src={avatar_url ?? undefined} alt="Foto del usuario" />
         </NavLink>
     ) : (
         <NavLink to="/login">Iniciar Sesion</NavLink>

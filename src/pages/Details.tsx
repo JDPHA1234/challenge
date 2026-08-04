@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link } from '../components/Link.js'
+import { Link } from '../components/Link'
 import { useParams } from 'react-router-dom'
-import { supabase } from '../supabase-client.js'
-import { Spinner } from '../components/Spinner.jsx'
-import { JobDetails } from '../components/JobDetails.tsx'
-import type { job } from '../components/types.ts'
+import { supabase } from '../supabase-client'
+import { Spinner } from '../components/Spinner'
+import { JobDetails } from '../components/JobDetails'
+import type { job } from '../components/types'
 
 export default function Details() {
     const [loading, setLoading] = useState(true)

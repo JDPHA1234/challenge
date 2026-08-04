@@ -1,10 +1,10 @@
-import { Link } from "../components/Link.js"
-import { supabase } from "../supabase-client.js"
-import { useState, useEffect, use } from "react"
+import { Link } from "../components/Link"
+import { supabase } from "../supabase-client"
+import { useState, useEffect } from "react"
 import { useParams } from 'react-router-dom'
-import { Spinner } from '../components/Spinner.jsx'
-import { job ,Empresa} from '../components/types.ts'
-import { SectionTitle } from '../components/SectionTitle.tsx'
+import { Spinner } from '../components/Spinner'
+import type { job, Empresa } from '../components/types'
+import { SectionTitle } from '../components/SectionTitle'
 
 
 export default function Empresa() {

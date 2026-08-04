@@ -78,6 +78,10 @@ export default function FormPerfil() {
         }
     }
     const uploadcv = async (file : File) => {
+        if (!user) {
+            throw new Error('Debes iniciar sesión para subir un CV.')
+        }
+
         const fileExt = file.name.split('.').pop();
 
         const fileName = `${Date.now()}.${fileExt}`;
@@ -97,6 +101,10 @@ export default function FormPerfil() {
         return data.publicUrl
     }
     const uploadProfileImage = async (file : File) => {
+        if (!user) {
+            throw new Error('Debes iniciar sesión para subir una imagen.')
+        }
+
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
 

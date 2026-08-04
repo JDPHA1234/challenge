@@ -1,13 +1,14 @@
 import { useRouter } from "../hooks/useRouter"
-import { useId } from 'react'
+import { useId, type FormEvent } from 'react'
 export default function Home() {
     const inputId= useId()
     const {navigateTo} = useRouter();
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const formData = new FormData(event.target);
+        const formData = new FormData(event.currentTarget);
         const searchText = formData.get('text')
-        const url = `/search?text=${encodeURIComponent(searchText)}`
+        const value = typeof searchText === 'string' ? searchText : ''
+        const url = `/search?text=${encodeURIComponent(value)}`
         navigateTo(url)
     }
     return (

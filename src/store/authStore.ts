@@ -1,5 +1,34 @@
 import { create } from 'zustand'
+import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../supabase-client.js'
+
+interface UsuarioAvatarRow {
+  avatar_url: string | null
+}
+
+interface AuthState {
+  isLoggedIn: boolean
+  error: string | null
+  user: User | null
+  avatar_url: string | null
+  loading: boolean
+}
+
+interface AuthResponse {
+  success: boolean
+  error: string | null
+  user?: User | null
+}
+
+interface AuthActions {
+  login: (email: string, password: string) => Promise<AuthResponse>
+  signUp: (email: string, password: string, extraData?: Record<string, unknown>) => Promise<AuthResponse>
+  logOut: () => Promise<AuthResponse>
+  initializeAuth: () => Promise<void>
+}
+
+type AuthStore = AuthState & AuthActions
+
 let authSubscription: { unsubscribe: () => void } | null = null
 
 async function fetchAvatarUrl(userId: string) {
@@ -8,7 +37,7 @@ async function fetchAvatarUrl(userId: string) {
       .from('usuario')
       .select('avatar_url')
       .eq('id', userId)
-      .maybeSingle()
+      .maybeSingle<UsuarioAvatarRow>()
 
     if (error) throw error
 
@@ -20,7 +49,7 @@ async function fetchAvatarUrl(userId: string) {
   }
 }
 
-async function loadUserSession(set: (state: any) => void, session: any) {
+async function loadUserSession(set: (partial: Partial<AuthState>) => void, session: Session | null) {
   const avatarUrl = session?.user ? await fetchAvatarUrl(session.user.id) : null
 
   set({
@@ -32,14 +61,14 @@ async function loadUserSession(set: (state: any) => void, session: any) {
   })
 }
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create<AuthStore>()((set) => ({
   isLoggedIn: false,
   error: null,
   user: null,
   avatar_url: null,
   loading: true,
 
-  login: async (email : string, password : string) => {
+  login: async (email: string, password: string) => {
     set({ loading: true, error: null })
 
     try {
@@ -63,17 +92,20 @@ export const useAuthStore = create((set) => ({
       return { success: true, error: null }
     } catch (error) {
       set({
-        error: (error as Error).message,
+        error: error instanceof Error ? error.message : String(error),
         user: null,
         isLoggedIn: false,
         avatar_url: null,
         loading: false,
       })
-      return { success: false, error:  (error as Error).message }
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : String(error),
+      }
     }
   },
 
-  signUp: async (email: string, password : string, extraData = {}) => {
+  signUp: async (email: string, password: string, extraData: Record<string, unknown> = {}) => {
     set({ loading: true, error: null })
 
     try {
@@ -96,8 +128,9 @@ export const useAuthStore = create((set) => ({
 
       return { success: true, error: null, user: data.user ?? null }
     } catch (error) {
-      set({ error: (error as Error).message, loading: false })
-      return { success: false, error: (error as Error).message }
+      const message = error instanceof Error ? error.message : String(error)
+      set({ error: message, loading: false })
+      return { success: false, error: message }
     }
   },
 
@@ -116,8 +149,9 @@ export const useAuthStore = create((set) => ({
       set({ user: null, isLoggedIn: false, avatar_url: null, loading: false, error: null })
       return { success: true, error: null }
     } catch (error) {
-      set({ loading: false, error: (error as Error).message })
-      return { success: false, error: (error as Error).message }
+      const message = error instanceof Error ? error.message : String(error)
+      set({ loading: false, error: message })
+      return { success: false, error: message }
     }
   },
 
@@ -146,13 +180,14 @@ export const useAuthStore = create((set) => ({
 
       authSubscription = subscription
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
       set({
         user: null,
         isLoggedIn: false,
         avatar_url: null,
         loading: false,
-        error: (error as Error).message,
+        error: message,
       })
     }
-  }
+  },
 }))

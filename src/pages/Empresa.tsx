@@ -1,8 +1,9 @@
-import { Link } from "../components/Link.jsx"
+import { Link } from "../components/Link.js"
 import { supabase } from "../supabase-client.js"
 import { useState, useEffect, use } from "react"
 import { useParams } from 'react-router-dom'
 import { Spinner } from '../components/Spinner.jsx'
+import { SectionTitleProps , job ,Empresa} from '../components/types.ts'
 const stats = [
 	{ value: "98%", label: "Retención" },
 	{ value: "120+", label: "Proyectos" },
@@ -50,7 +51,7 @@ const positions = [
 	},
 ]
 
-function SectionTitle({ title, subtitle }) {
+function SectionTitle({ title, subtitle } : SectionTitleProps) {
 	return (
 		<header className="company-section-title">
 			<h2>{title}</h2>
@@ -61,9 +62,9 @@ function SectionTitle({ title, subtitle }) {
 
 export default function Empresa() {
 	const [loading, setLoading] = useState(true)
-	const [empresa, setEmpresa] = useState(null)
-	const [error, SetError] = useState(null)
-	const [trabajo, setTrabajo] = useState(null)
+	const [empresa, setEmpresa] = useState<Empresa | null>(null)
+	const [error, SetError] = useState<string | null>(null)
+	const [trabajo, setTrabajo] = useState<job[] | null>(null)
 	const { id } = useParams()
 	useEffect(() => {
 		async function fetchEmpresa() {
@@ -82,7 +83,7 @@ export default function Empresa() {
 				setEmpresa(empresaReq.data);
 				setTrabajo(trabajoReq.data || []);
 			} catch (error) {
-				SetError(error.message)
+				SetError((error as Error).message)
 				console.error('error fetching de datos', error)
 			} finally {
 				setLoading(false)

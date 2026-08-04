@@ -1,33 +1,37 @@
-import styles from './Pagination.module.css'
-export function Pagination({currentPage = 1,totalPages = 5, onPageChange}){
+import styles from './pagination.module.css'
+
+import type { PaginationProps} from "./types.ts"
+
+
+export function Pagination({currentPage = 1,totalPages = 5, onPageChange} : PaginationProps ){
     const pagesNav=Array.from({length : totalPages},(_,index) => index+1)
     const firstPage = currentPage === 1 
     const lastPage = currentPage === totalPages
     const stylefirstPage = firstPage ? styles.disabledNav : ''
     const styleLastPage = lastPage ? styles.disabledNav : ''
-    const prevClick= (event) => {
+    const prevClick= (event : React.MouseEvent<HTMLElement> ) => {
         event.preventDefault();
         if(!firstPage)
         {
             onPageChange(currentPage- 1);
         }
     }
-    const changeClick= (event,page) => {
+    const changeClick= (event : React.MouseEvent<HTMLElement>,page : number) => {
         event.preventDefault()   
          if(currentPage != page){
             onPageChange(page);
          }
     }
-    const nextClick= (event) => {
+    const nextClick= (event : React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         if(!lastPage)
         {
             onPageChange(currentPage+ 1);
         }
     }
-    const buildUrlhref = (page) => {
-        const url = new URL(window.location)
-            url.searchParams.set('page',page)
+    const buildUrlhref = (page : number) => {
+        const url = new URL(window.location.href)
+            url.searchParams.set('page',page.toString())
         return `${url.pathname}?${url.searchParams.toString()}`
     } 
     return (

@@ -1,7 +1,8 @@
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../store/authStore.js";
 import { Navigate } from "react-router-dom";
 import { Spinner } from "./Spinner.jsx";
-export function ProtectedRoute({children})
+import type { ProtectedRouteProps } from "./types.ts";
+export function ProtectedRoute({children} : ProtectedRouteProps)
 {
     const {isLoggedIn , loading} = useAuthStore();
 

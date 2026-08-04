@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react' // Asegúrate de importar useEffect
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuthStore } from "../store/authStore.js"
+import { useAuthStore } from '../store/authStore.js'
 import { supabase } from '../supabase-client.js'
+import type { JobCardProps } from './types'
 
-export function JobCard({ jobs }) {
-    // 1. Obtenemos 'isLoggedIn' y el 'user' completo desde tu store
+
+export function JobCard({ jobs }: JobCardProps) {
     const { isLoggedIn, user } = useAuthStore() 
     const [loading, setLoading] = useState(true) // Estado para manejar la carga de la solicitud
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<string | null>(null)
     const [isApplied, setApplied] = useState(false)
     // 2. VERIFICAR AL CARGAR: Revisamos si ya existe la solicitud en la base de datos
     useEffect(() => {
@@ -36,7 +37,7 @@ export function JobCard({ jobs }) {
                 }
             } catch (error) {
                 setError('No se pudo verificar tu candidatura. Intenta de nuevo.')
-                console.error('Error verificando el estado de la solicitud:', error.message);
+                console.error('Error verificando el estado de la solicitud:', (error as Error)?.message);
             }finally {
                 setLoading(false); // Terminamos la carga
             }
@@ -69,7 +70,7 @@ export function JobCard({ jobs }) {
             solicitud.cvSolicitud_url = data?.cv_url || null;
         }catch (error) {
             setError('No se pudo validar tu CV. Intenta más tarde.')
-            console.error('Error al enviar la solicitud:', error.message);
+            console.error('Error al enviar la solicitud:', (error as Error)?.message);
         }
 
         if (solicitud.cvSolicitud_url) {
@@ -95,7 +96,7 @@ export function JobCard({ jobs }) {
 
         }catch (error) {
             setError('No se pudo enviar tu solicitud. Intenta nuevamente.')
-            console.error('Error al enviar la solicitud:', error.message);
+            console.error('Error al enviar la solicitud:', (error as Error)?.message);
         }finally {
             setLoading(false); // Terminamos la carga  
         }
@@ -104,6 +105,9 @@ export function JobCard({ jobs }) {
     // 4. Variables calculadas para el render
     const text = isApplied ? 'Aplicado' : 'Aplicar'
     const classButton = isApplied ? 'button-apply-job' : ''
+    const companyName = Array.isArray(jobs?.Empresa)
+        ? jobs?.Empresa[0]?.nombre
+        : jobs?.Empresa?.nombre || ''
     return (
         <article className='result-search'
             data-modalidad={"full-time"}
@@ -118,7 +122,7 @@ export function JobCard({ jobs }) {
                     </button>
                 )}
             </div>
-            <small>{jobs?.Empresa?.nombre} | {jobs?.modalidad} ({jobs?.ubicacion})</small>
+            <small>{companyName} | {jobs?.modalidad} ({jobs?.ubicacion})</small>
             <p className='descriptionSearch'>{jobs?.descripcion}</p>
             {error ? <small>{error}</small> : null}
         </article>

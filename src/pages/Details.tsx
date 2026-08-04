@@ -1,26 +1,16 @@
 import { useState, useEffect } from 'react'
-import { Link } from '../components/Link.jsx'
+import { Link } from '../components/Link.js'
 import { useParams } from 'react-router-dom'
-import snarkdown from 'snarkdown'
 import { supabase } from '../supabase-client.js'
 import { Spinner } from '../components/Spinner.jsx'
-function JobDetails({title,content}) {
-    const html = content ? snarkdown(content) : ''
-    return (
-        <article className="Each-details">
-                <h2>{title}</h2>
-                <div className="prose" dangerouslySetInnerHTML={{__html : html}} />
-                
-            </article>
-    )
-}
+import { JobDetails } from '../components/JobDetails.tsx'
+import type { job } from '../components/types.ts'
 
-        
-export default function Details(){
-    const [loading,setLoading] = useState(true)
-    const [job,setJob] = useState(null)
-    const [error,SetError] = useState(null)
-    const {id}= useParams()
+export default function Details() {
+    const [loading, setLoading] = useState(true)
+    const [job, setJob] = useState<job | null>(null)
+    const [error, SetError] = useState<string | null>(null)
+    const { id } = useParams()
     useEffect(() => {
         async function fetchJob() {
             try {
@@ -40,10 +30,11 @@ export default function Details(){
                 if (!data) {
                     throw new Error('No se encontró la oferta solicitada.')
                 }
-                setJob(data)
+                setJob(data as job)
             } catch (error) {
-                SetError(error.message)
-                console.error('error fetching de datos', error)
+                const message = error instanceof Error ? error.message : String(error)
+                SetError(message)
+                console.error('error fetching de datos', message)
             } finally {
                 setLoading(false)
             }
@@ -74,14 +65,19 @@ export default function Details(){
             <header>
                 <div>
                 <h1>{job.titulo}</h1>
-                <small>{job.Empresa.nombre} | {job.ubicacion}</small>
+                <small>{(() => {
+                    const companyName = Array.isArray(job.Empresa)
+                        ? job.Empresa[0]?.nombre
+                        : job.Empresa?.nombre || ''
+                    return `${companyName} | ${job.ubicacion}`
+                })()}</small>
                 </div>
     
             </header>
-            <JobDetails title='Descripcion del puesto' content={job.content?.description} />
-            <JobDetails title='Responsabilidades' content={job.content?.responsibilities} />
-            <JobDetails title='Requisitos' content={job.content?.requirements} />
-            <JobDetails title='Acerca de la empresa' content={job.content?.about} />
+            <JobDetails title='Descripcion del puesto' content={job.content?.description ?? null} />
+            <JobDetails title='Responsabilidades' content={job.content?.responsibilities ?? null} />
+            <JobDetails title='Requisitos' content={job.content?.requirements ?? null} />
+            <JobDetails title='Acerca de la empresa' content={job.content?.about ?? null} />
             <div>
             </div>
         </section>

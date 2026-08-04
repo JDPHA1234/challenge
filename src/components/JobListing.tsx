@@ -1,6 +1,7 @@
-import {JobCard} from './JobCards.jsx';
+import {JobCard} from './JobCards.js';
 import { Spinner } from './Spinner.jsx';
-export function JobListing({joblist}){
+import type { JobListingProps } from './types.ts'
+export function JobListing({joblist}: JobListingProps){
     return (
        <div className="results-card">
                  {joblist.map((job) => (

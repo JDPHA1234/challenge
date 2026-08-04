@@ -1,16 +1,18 @@
 import { useId, useState, useEffect ,useRef} from 'react'
-export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFilterValue}) {
+import type { ReactNode } from 'react'
+import type { FormProps , Filter} from './types.ts'
+export function Form({ onSearch, onChangeText, onReset, initialValue ,initialFilterValue}: FormProps) {
     const idText = useId();
     const idTech = useId();
     const idmod = useId();
     const idExp = useId()
-    const [focusField, setFocusElement] = useState(null)
+    const [focusField, setFocusElement] = useState<boolean>(false)
     const focusSearch = focusField ? 'is-focus' : ''
-    const timeOutId = useRef(null)
-    const handleSubmit = (event) => {
+    const timeOutId = useRef<number | null>(null)
+    const handleSubmit = (event : React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
     }
-    const handleChange = (event) => {
+    const handleChange = (event : React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (event.target.name === idText) {
             const text = event.target.value;
@@ -23,10 +25,10 @@ export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFil
             },500);
         } else {
             const formData = new FormData(event.currentTarget)
-            const filters = {
-                tech: formData.get(idTech),
-                mod: formData.get(idmod),
-                idExp: formData.get(idExp)
+            const filters : Filter = {
+                tech: formData.get(idTech) as string,
+                mod: formData.get(idmod) as string,
+                idExp: formData.get(idExp)as string
             }
             if(timeOutId.current)
             {
@@ -38,15 +40,18 @@ export function Form({ onSearch, onChangeText, OnReset, initialValue ,initialFil
         }
 
     }
-    const handleFocus = (event) => {
-        setFocusElement(event.target);
+    const handleFocus = (event : React.FocusEvent<HTMLInputElement>) => {
+        setFocusElement(true);
     } 
-    const handleBlud = (event) => {
-        setFocusElement(null);
+    const handleBlud = (event : React.FocusEvent<HTMLInputElement>) => {
+        setFocusElement(false);
     }
     const handleClear = () => {
-        document.querySelector('.searchForm').reset()
-        OnReset();
+        const element = document.querySelector<HTMLFormElement>('.searchForm')
+        if (element) {
+            element.reset()
+        }
+        onReset()
     }
     return (
         <section className="search-section">

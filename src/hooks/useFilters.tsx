@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { supabase } from '../supabase-client.js'
+import { supabase } from '../supabase-client'
+import type { Filter, job } from '../components/types.ts'
+
+
+
 export function useFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(() => {
@@ -9,18 +13,18 @@ export function useFilters() {
     });
     const [textSearch, setTextSearch] = useState(() => searchParams.get('text') || '');
     const [filters, setFilters] = useState(() => {
-        const filter = {
+        const filter: Filter = {
             tech: searchParams.get('technology') || '',
             mod: searchParams.get('modalidad') || '',
             idExp: searchParams.get('exp') || '',
         }
         return filter;
     })
-    const handleFilters = (filters) => {
+    const handleFilters = (filters: Filter) => {
         setFilters(filters);
         setCurrentPage(1);
     }
-    const handleTextFilter = (text) => {
+    const handleTextFilter = (text: string) => {
         setTextSearch(text);
         setCurrentPage(1);
     }
@@ -35,9 +39,9 @@ export function useFilters() {
     }
     const itemsforPage = 6;
     const [total, setTotal] = useState(0)
-    const [jobs, setJobs] = useState([])
+    const [jobs, setJobs] = useState<job[]>([])
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<Error | null>(null)
     useEffect(() => {
         async function getJobs() {
             try {
@@ -75,8 +79,8 @@ export function useFilters() {
             } catch (error) {
                 setJobs([])
                 setTotal(0)
-                setError(error.message)
-                console.error('Error fetching de datos', error);
+                setError(error as Error)
+                console.error('Error fetching de datos', (error as Error).message);
             } finally {
                 setLoading(false);
 

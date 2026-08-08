@@ -1,4 +1,4 @@
-# Challenge Técnico: Software Engineer Web - AranguriApps
+
 
 ## 📝 Descripción del Proyecto
 >[Este proyecto es una plataforma ágil de **Búsqueda de Empleos** enfocada en optimizar la experiencia del usuario (postulante). Con el objetivo de mitigar la complejidad del dominio dentro del tiempo establecido para el challenge, el sistema se centra exclusivamente en la **perspectiva y los flujos del cliente/usuario final** (Búsqueda, visualización de ofertas y gestión de postulaciones).]
